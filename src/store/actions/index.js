@@ -1,0 +1,1 @@
+export { fetchTodaysFixtures } from './fixtures';
