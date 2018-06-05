@@ -13,7 +13,7 @@ const fixture = props => {
         <DateText>{fixture.date}</DateText>
     </FixtureContainer> : "No Games today :(";
     return (
-        {view}
+        view
     );
 }
 
