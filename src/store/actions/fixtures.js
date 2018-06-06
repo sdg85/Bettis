@@ -79,7 +79,7 @@ export const fetchTodaysFixtures = () => {
     }
 }
 
-const refreshToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1YjBlNzBlZTQ2MjNjNDU3ZjBjMDA4ZGUiLCJpYXQiOjE1Mjc4NDc2OTh9.yR6SdpJsk3NNKqt3Yg5kmf2GCmNlH-rxTDHNlsBnEMA";
+// const refreshToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1YjBlNzBlZTQ2MjNjNDU3ZjBjMDA4ZGUiLCJpYXQiOjE1Mjc4NDc2OTh9.yR6SdpJsk3NNKqt3Yg5kmf2GCmNlH-rxTDHNlsBnEMA";
 const headersConf = {
     headers: { "x-auth-token": "b87d814a97c0435481e58344ccd40340" }
 }

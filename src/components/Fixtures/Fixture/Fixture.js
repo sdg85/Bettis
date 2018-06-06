@@ -35,7 +35,7 @@ export default fixture;
 const FixtureContainer = styled.div`
     display: flex;
     flex-direction: column;
-    background-color: #f2f2f2;  
+    background-color: rgba(20, 20, 20, 0.03);  
     padding: 20px;
     margin: 20px;
     opacity: 0.9;
@@ -86,7 +86,7 @@ const Vs = styled.span`
     padding: 10px
 `;
 
-const DateText = styled.h1`
+/* const DateText = styled.h1`
     color: #000;
     margin: 10px;
-`;
+`; */

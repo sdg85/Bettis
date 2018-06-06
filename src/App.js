@@ -37,11 +37,11 @@ const mapDispatchToProps = disapatch => {
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
 
-const Toolbar = styled.div`
-  width: 100%;
-  background-color: #f1f1f1;
-  height: 100px; 
-`;
+// const Toolbar = styled.div`
+//   width: 100%;
+//   background-color: #f1f1f1;
+//   height: 100px; 
+// `;
 
 const Container = styled.div`
   /* background-color: #8e0809; */
