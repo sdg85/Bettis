@@ -14,7 +14,7 @@ export const fetchTodaysFixtures = () => {
         // const fixturesData = await axios.get("https://api.sportdeer.com/v1/fixtures?dateFrom=2018-06-14&dateTo=2018-06-15&access_token=" + res.data.new_access_token);
 
         try {
-            const res = await axios.get("http://api.football-data.org/v1/competitions/467/fixtures?timeFrame=n9", headersConf);
+            const res = await axios.get("http://api.football-data.org/v1/competitions/467/fixtures?timeFrame=n12", headersConf);
             console.log(res);
             const fixtures = await Promise.all(res.data.fixtures.map(async fixture => {
 
