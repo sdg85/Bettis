@@ -16,7 +16,7 @@ class App extends Component {
     )) : "NO MATCHES TODAY";
     return (
       <Container>
-        <Toolbar />
+        {/* <Toolbar /> */}
         {view}
       </Container>
     );
@@ -44,5 +44,7 @@ const Toolbar = styled.div`
 `;
 
 const Container = styled.div`
-  background-color: #8e0809;
+  /* background-color: #8e0809; */
+  height: 100%;
+  width: 100%;
 `;
