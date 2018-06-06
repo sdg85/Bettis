@@ -12,7 +12,7 @@ class App extends Component {
 
   render() {
     let view = this.props.fixtures ? this.props.fixtures.map(fixture => (
-      <Fixture key={fixture.id} fixture={fixture} />
+      <Fixture key={fixture.fixtureId} fixture={fixture} />
     )) : "NO MATCHES TODAY";
     return (
       <Container>

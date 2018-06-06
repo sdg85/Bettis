@@ -6,7 +6,7 @@ const fixture = props => {
     const fixture = props.fixture;
     let view = fixture ?
         <FixtureContainer>
-            <Header>{`${moment(fixture.date).format("HH:mm")}`}</Header>
+            <Header>{`${moment(fixture.date).format("YYYY-MM-DD HH:mm")}`}</Header>
             <TeamsContainer >
                 <Team >
                     <Flag src={fixture.homeTeamFlagUrl} />
