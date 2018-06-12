@@ -4,6 +4,7 @@ import moment from 'moment';
 
 const fixture = props => {
     const fixture = props.fixture;
+
     let view = fixture ?
         <FixtureContainer>
             <Header>{`${moment(fixture.date).format("YYYY-MM-DD HH:mm")}`}</Header>
@@ -24,6 +25,11 @@ const fixture = props => {
                     </TeamNameContainer>
                 </Team>
             </TeamsContainer>
+            <BetContainer>
+                <Bet id="homeTeam" onClick={() => props.clicked("homeTeam", fixture.id)} bet={props.bet} >1</Bet>
+                <Bet id="draw" onClick={() => props.clicked("draw", fixture.id)} bet={props.bet} style={{ border: "1px solid #ccc", flex: 1, textAlign: "center", padding: 3 }}>X</Bet>
+                <Bet id="awayTeam" onClick={() => props.clicked("awayTeam", fixture.id)} bet={props.bet} style={{ border: "1px solid #ccc", flex: 1, textAlign: "center", padding: 3 }}>2</Bet>
+            </BetContainer>
         </FixtureContainer> : "No Games today :(";
     return (
         view
@@ -31,6 +37,29 @@ const fixture = props => {
 }
 
 export default fixture;
+
+const BetContainer = styled.div`
+    display: flex;
+    justify-content: space-around; 
+    border: 1px solid #ccc; 
+    margin-top: 10px;
+`;
+
+const Bet = styled.div`
+    border: 1px solid #ccc; 
+    flex: 1;
+    text-align: center;
+    padding: 3px;
+    background-color: ${ props => {
+        if(props.bet)
+        {
+            if(props.bet.bet === props.id)
+                return "#cf0c1e";
+        }
+         
+         return "";   
+    } };
+`;
 
 const FixtureContainer = styled.div`
     display: flex;

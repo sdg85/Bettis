@@ -1,50 +1,34 @@
 import React, { Component } from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
-import { connect } from 'react-redux';
-import { fetchTodaysFixtures } from './store/actions/index';
-import Fixture from './components/Fixtures/Fixture/Fixture';
+import Betting from './containers/Betting/Betting';
+import Toolbar from './components/Navigation/Toolbar/Toolbar';
 
 class App extends Component {
 
-  componentDidMount(){
-    this.props.onFetchTodaysFixtures();
-  }
-
   render() {
-    let view = this.props.fixtures ? this.props.fixtures.map(fixture => (
-      <Fixture key={fixture.fixtureId} fixture={fixture} />
-    )) : "NO MATCHES TODAY";
     return (
-      <Container>
-        {/* <Toolbar /> */}
-        {view}
-      </Container>
+      <BrowserRouter>
+        <Container>
+          <Toolbar />
+          <Switch>
+            <Route path="/table" render={render => {
+              return (
+                <h1>Table Page</h1>
+              );
+            }} />
+            <Route path="/" exact component={Betting} />
+          </Switch>
+        </Container>
+      </BrowserRouter>
     );
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    fixtures: state.fixturesReducer.fixtures
-  }
-}
-
-const mapDispatchToProps = disapatch => {
-  return {
-    onFetchTodaysFixtures: () => disapatch(fetchTodaysFixtures())
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
-
-// const Toolbar = styled.div`
-//   width: 100%;
-//   background-color: #f1f1f1;
-//   height: 100px; 
-// `;
+export default App;
 
 const Container = styled.div`
   /* background-color: #8e0809; */
-  height: 100%;
-  width: 100%;
+  
+  margin-top: 150px;
 `;

@@ -1,1 +1,1 @@
-export { fetchTodaysFixtures } from './fixtures';
+export { fetchTodaysFixtures, onBet, removeBet, changeBet } from './fixtures';
