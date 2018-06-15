@@ -29,6 +29,5 @@ export default App;
 
 const Container = styled.div`
   /* background-color: #8e0809; */
-  
   margin-top: 150px;
 `;

@@ -50,6 +50,15 @@ const Bet = styled.div`
     flex: 1;
     text-align: center;
     padding: 3px;
+    color: ${ props => {
+        if(props.bet)
+        {
+            if(props.bet.bet === props.id)
+                return "#fff";
+        }
+         
+         return "#000";   
+    } };
     background-color: ${ props => {
         if(props.bet)
         {
@@ -64,11 +73,12 @@ const Bet = styled.div`
 const FixtureContainer = styled.div`
     display: flex;
     flex-direction: column;
-    background-color: rgba(20, 20, 20, 0.03);  
+    background-color: rgba(255, 255, 255, 1);  
     padding: 20px;
     margin: 20px;
     opacity: 0.9;
-    box-shadow: 0.05555555555555555rem 0.05555555555555555rem 1.1111111111111112rem rgba(20,20,20,0.27);
+    border: 2px solid #eee5c6;
+    box-shadow: 0.055rem 0.055rem 1.112rem rgba(20,20,20,0.27);
 `;
 
 const Header = styled.div`

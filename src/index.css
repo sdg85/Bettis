@@ -2,4 +2,8 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Oxygen', sans-serif;
+  background-image: url("https://st3.depositphotos.com/4559725/17638/v/1600/depositphotos_176384684-stock-illustration-football-background-russia-2018.jpg");
+  /* background-repeat: repeat-y; */
+  background-attachment: fixed;
+  /* background-position: center; */
 }
