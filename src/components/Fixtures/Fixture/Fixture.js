@@ -109,10 +109,12 @@ const VsContainer = styled.div`
     justify-content: center; 
     display: flex; 
     flex-direction: column;
+    align-items: center;
 `;
 
 const Vs = styled.div`
     font-weight: 700;
+    max-width: 20px;
     text-align: center; 
     color: #fff; 
     background-color: ${ props => props.date > dateTime() ? "#cf0c1e" : "#14141445"}; 
