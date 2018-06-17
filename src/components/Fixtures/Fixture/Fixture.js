@@ -17,9 +17,11 @@ const fixture = props => {
                     </TeamNameContainer>
                 </Team>
                 <VsContainer>
+                
                     <div>
                         <h5>{fixture.status}</h5>
                     </div>
+                    <Vs date={matchDateTime}>Vs</Vs>
                     {
                         dateTime() > matchDateTime ?
                             <div style={{textAlign: "center"}}>
@@ -27,7 +29,6 @@ const fixture = props => {
                             </div>
                             : null
                     }
-                    <Vs date={matchDateTime}>Vs</Vs>
                 </VsContainer>
                 <Team >
                     <Flag src={fixture.awayTeamFlagUrl} />
