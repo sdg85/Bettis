@@ -70,6 +70,7 @@ export const fetchTodaysFixtures = () => {
 
                 return {
                     id: fixture._id,
+                    status: fixture.fixture_status,
                     matchDay: fixture.round,
                     date: fixture.schedule_date,
                     homeTeamName: fixture.team_season_home_name,
@@ -88,7 +89,7 @@ export const fetchTodaysFixtures = () => {
     }
 }
 
-const refreshToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1YjBlNzBlZTQ2MjNjNDU3ZjBjMDA4ZGUiLCJpYXQiOjE1Mjc4NDc2OTh9.yR6SdpJsk3NNKqt3Yg5kmf2GCmNlH-rxTDHNlsBnEMA";
+const refreshToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1YjBlNzBlZTQ2MjNjNDU3ZjBjMDA4ZGUiLCJpYXQiOjE1MjkyNjIyNDB9.eIZRZ6mZPOl5FXjZL4KJYGVStwTgFTB6iA-t7oJBpTY";
 const headersConf = {
     headers: { "x-auth-token": "b87d814a97c0435481e58344ccd40340" }
 }
