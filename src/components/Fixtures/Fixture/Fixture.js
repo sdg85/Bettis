@@ -101,9 +101,9 @@ const Team = styled.div`
 `;
 
 const Flag = styled.img`
-        border-radius: 100%; 
-        height: 80px;
-        width: 80px;
+        border-radius: 50%; 
+        height: 90px;
+        width: 90px;
         border: 1px solid #ccc;
 `;
 

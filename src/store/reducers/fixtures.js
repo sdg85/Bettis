@@ -1,8 +1,9 @@
-import { TODAYS_FIXTURES, BETTING, REMOVE_BET, CHANGE_BET } from '../actions/actionTypes';
+import { TODAYS_FIXTURES, BETTING, REMOVE_BET, CHANGE_BET, GET_FLAGS } from '../actions/actionTypes';
 
 const initialState = {
     fixtures: [],
-    bets: []
+    bets: [],
+    flags: []
 }
 
 const reducer = (state = initialState, action) => {
@@ -29,6 +30,11 @@ const reducer = (state = initialState, action) => {
                 bets: state.bets
                     .filter(bet => bet.fixtureId !== action.bet.fixtureId)
                     .concat(action.bet)
+            }
+            case GET_FLAGS:
+            return {
+                ...state,
+                flags: action.flags
             }
         default: return { state }
     }

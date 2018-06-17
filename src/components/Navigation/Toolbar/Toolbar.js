@@ -5,9 +5,6 @@ import { NavLink } from 'react-router-dom';
 const toolbar = props => {
     return (
         <ToolbarContainer>
-            {/* <div style={{}}>
-                
-            </div> */}
             <ImgContainer>
                 <img src="https://www.underconsideration.com/brandnew/archives/russia_2018_logo_detail.jpg" height="100px" width="90px" alt="World cup 2018" />
             </ImgContainer>
@@ -37,7 +34,7 @@ const Nav = styled(NavLink) `
     max-height: 60px;
     max-width: 90px;
     text-align: center;
-    /* border-radius: 5px; */
+    border: 2px solid #eee5c6;
     font-weight: 600;
     box-shadow: 0.05rem 0.05rem 1.1rem rgba(20,20,20,0.27);
     &:hover{
@@ -65,30 +62,4 @@ const ToolbarContainer = styled.div`
     background-color: rgba(255, 255, 255, 0.93);
     border: 1px solid #eee5c6;
     box-shadow: 0.05rem 0.05rem 1.1rem rgba(20,20,20,0.27);
-`;
-
-const NavContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    flex: 2;
-    /* box-shadow: 0 0.05rem 1.1rem rgba(20,20,20,0.27); */
-    justify-content: center;
-    align-items: center;
-`;
-
-const Wc2018 = NavContainer.extend`
-    padding: 5px;
-    flex: 1;
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-`;
-
-const WcImage = styled.img
-    .attrs({
-        src: "https://acmwallethu.files.wordpress.com/2018/04/58a6139d037b10734c0b9336808b923f.jpg?w=223&h=300",
-        width: "130px",
-        height: "130px",
-        alt: "World cup 2018"
-    }) `
-    border: 2px solid #ccc;
 `;
