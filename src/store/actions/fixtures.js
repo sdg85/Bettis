@@ -1,32 +1,11 @@
-import { TODAYS_FIXTURES, BETTING, REMOVE_BET, CHANGE_BET, GET_FLAGS } from './actionTypes';
+import { TODAYS_FIXTURES, GET_FLAGS } from './actionTypes';
 import axios from 'axios';
 import moment from 'moment';
 
-export const getTodaysFixtures = fixtures => {
+export const getFixtures = fixtures => {
     return {
         type: TODAYS_FIXTURES,
         fixtures
-    }
-}
-
-export const onBet = bet => {
-    return {
-        type: BETTING,
-        bet
-    }
-}
-
-export const removeBet = fixtureId => {
-    return {
-        type: REMOVE_BET,
-        fixtureId
-    }
-}
-
-export const changeBet = bet => {
-    return {
-        type: CHANGE_BET,
-        bet
     }
 }
 
@@ -37,24 +16,18 @@ export const getFlags = flags => {
     }
 }
 
+
+
 export const fetchTodaysFixtures = () => {
-    return async (dispatch,getState) => {
+    return async (dispatch, getState) => {
         try {
             //Get flags from state
             let flags = getState().flags;
-            
-            //Get flags for all teams if there not already fetched.
-            if(!flags){
-                const flagRes = await axios.get("http://api.football-data.org/v1/competitions/467/teams", headersConf);
-                flags = flagRes.data.teams.map( team => {
-                    if(team.name === "Korea Republic")
-                        team.name = "South Korea";
 
-                    return {
-                        teamName: team.name,
-                        flagUrl: team.crestUrl
-                    }
-                });
+            //Get flags for all teams if there not already fetched.
+            if (!flags) {
+                const flagsData = await axios.get("https://bettis-app.firebaseio.com/flags.json");
+                flags = flagsData.data;
                 dispatch(getFlags(flags));
             }
             const res = await axios.get("https://api.sportdeer.com/v1/accessToken/?refresh_token=" + refreshToken);
@@ -64,7 +37,6 @@ export const fetchTodaysFixtures = () => {
             const fixturesData = await axios.get("https://api.sportdeer.com/v1/fixtures?dateFrom=" + fromDate + "&dateTo=" + toDate + "&access_token=" + res.data.new_access_token);
 
             const fixtures = fixturesData.data.docs.map(fixture => {
-                
                 const homeFlag = flags.find(flag => flag.teamName === fixture.team_season_home_name);
                 const awayFlag = flags.find(flag => flag.teamName === fixture.team_season_away_name);
 
@@ -81,7 +53,7 @@ export const fetchTodaysFixtures = () => {
                     goalAwayTeam: fixture.number_goal_team_away
                 }
             });
-            dispatch(getTodaysFixtures(fixtures));
+            dispatch(getFixtures(fixtures));
         }
         catch (e) {
             console.log(e);
@@ -90,6 +62,6 @@ export const fetchTodaysFixtures = () => {
 }
 
 const refreshToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1YjBlNzBlZTQ2MjNjNDU3ZjBjMDA4ZGUiLCJpYXQiOjE1MjkyNjIyNDB9.eIZRZ6mZPOl5FXjZL4KJYGVStwTgFTB6iA-t7oJBpTY";
-const headersConf = {
-    headers: { "x-auth-token": "b87d814a97c0435481e58344ccd40340" }
-}
+// const headersConf = {
+//     headers: { "x-auth-token": "b87d814a97c0435481e58344ccd40340" }
+// }

@@ -1,33 +1,35 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchTodaysFixtures, onBet, removeBet, changeBet } from '../../store/actions/index';
+import { fetchTodaysFixtures, saveNewBet, fetchBets, saveChangedBet, deleteBet } from '../../store/actions/index';
 import Fixture from '../../components/Fixtures/Fixture/Fixture';
 
 class Betting extends Component {
 
   componentDidMount() {
+    this.props.onGetBets();
     this.props.onFetchTodaysFixtures();
   }
 
   onClickedFixture = (choice, fixtureId) => {
     const oldBet = this.props.bets.find(bet => bet.fixtureId === fixtureId);
 
-    if (oldBet) {
-      if (oldBet.bet === choice)
-        this.props.onRemoveBet(oldBet.fixtureId);
-      else
-        this.props.onChangeBet({ fixtureId: fixtureId, bet: choice });
+    if (oldBet && oldBet.bet === choice) {
+      this.props.onRemoveBet(oldBet.fixtureId);
+    }
+    else if(oldBet) {
+      const bet = { [fixtureId]: { fixtureId: fixtureId, bet: choice } };
+      this.props.onChangeBet(bet);
     }
     else {
-      const bet = { fixtureId: fixtureId, bet: choice };
-      this.props.onBet(bet);
+      const bet = { [fixtureId]: { fixtureId: fixtureId, bet: choice } };
+      this.props.onSaveBet(bet);
     }
-
   }
 
   render() {
     let view = this.props.fixtures ? this.props.fixtures.map(fixture => {
-      const bet = this.props.bets.find(bet => bet.fixtureId === fixture.id);
+      const bets = this.props.bets;
+      const bet = bets ? bets.find(bet => bet.fixtureId === fixture.id) : null;
       return <Fixture
         key={fixture.id}
         bet={bet}
@@ -36,7 +38,7 @@ class Betting extends Component {
     }) : "NO MATCHES TODAY";
 
     return (
-        view
+      view
     );
   }
 }
@@ -44,16 +46,18 @@ class Betting extends Component {
 const mapStateToProps = state => {
   return {
     fixtures: state.fixturesReducer.fixtures,
-    bets: state.fixturesReducer.bets
+    bets: state.betsReducer.bets,
+    // array: state.testReducer.array
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
     onFetchTodaysFixtures: () => dispatch(fetchTodaysFixtures()),
-    onBet: bet => dispatch(onBet(bet)),
-    onRemoveBet: fixtureId => dispatch(removeBet(fixtureId)),
-    onChangeBet: bet => dispatch(changeBet(bet))
+    onSaveBet: bet => dispatch(saveNewBet(bet)),
+    onRemoveBet: fixtureId => dispatch(deleteBet(fixtureId)),
+    onGetBets: () => dispatch(fetchBets()),
+    onChangeBet: (bet) => dispatch(saveChangedBet(bet))
   }
 }
 

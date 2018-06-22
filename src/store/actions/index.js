@@ -1,1 +1,2 @@
-export { fetchTodaysFixtures, onBet, removeBet, changeBet } from './fixtures';
+export { fetchTodaysFixtures } from './fixtures';
+export { saveNewBet, removeBet, fetchBets, initBets, saveChangedBet, deleteBet } from './bets';
