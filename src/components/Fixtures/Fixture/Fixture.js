@@ -17,7 +17,6 @@ const fixture = props => {
                     </TeamNameContainer>
                 </Team>
                 <VsContainer>
-                
                     <div>
                         <h5>{fixture.status}</h5>
                     </div>
@@ -107,7 +106,7 @@ const TeamNameContainer = styled.div`
 `;
 
 const VsContainer = styled.div`
-    justify-content: center; 
+    justify-content: flex-start; 
     display: flex; 
     flex-direction: column;
     align-items: center;

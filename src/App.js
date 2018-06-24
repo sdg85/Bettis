@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 import Betting from './containers/Betting/Betting';
 import Toolbar from './components/Navigation/Toolbar/Toolbar';
+import Auth from './containers/Auth/Auth';
 
 class App extends Component {
 
@@ -17,6 +18,7 @@ class App extends Component {
                 <h1>Table Page</h1>
               );
             }} />
+            <Route path="/login" component={Auth} />
             <Route path="/" exact component={Betting} />
           </Switch>
         </Container>
