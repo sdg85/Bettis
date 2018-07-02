@@ -18,7 +18,7 @@ class App extends Component {
                 <h1>Table Page</h1>
               );
             }} />
-            <Route path="/login" component={Auth} />
+            <Route path="/signin" component={Auth} />
             <Route path="/" exact component={Betting} />
           </Switch>
         </Container>
