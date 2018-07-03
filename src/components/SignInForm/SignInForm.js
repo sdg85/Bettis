@@ -3,7 +3,10 @@ import styled from 'styled-components';
 
 const signInForm = props => {
     return (
-        <Form onSubmit={props.submit}>
+        <Form onSubmit={props.submit} name="signIn">
+        <div>
+            <h2>Sign In</h2>
+        </div>
             <Input
                 value={props.username}
                 type="text"

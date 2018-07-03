@@ -1,9 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
+import { withRouter } from 'react-router-dom';
 
 const signUpForm = props => {
     return (
-        <Form onSubmit={props.submit}>
+        <Form onSubmit={props.submit} name="signUp">
+            <div>
+                <h2>Sign Up</h2>
+            </div>
             {/* <Input
                 type="text"
                 value={props.firstName}
@@ -27,11 +31,12 @@ const signUpForm = props => {
                 placeholder="Passoword"
                 onChange={props.passwordChanged} />
             <Button type="submit" >Sign Up</Button>
+            <Button type="button" onClick={() => props.history.push("/signin")} >Already a member? Sign in here!</Button>
         </Form>
     );
 }
 
-export default signUpForm;
+export default withRouter(signUpForm);
 
 const Form = styled.form`
     display: flex;

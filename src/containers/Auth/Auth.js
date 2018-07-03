@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import SignUpForm from '../../components/SignUpForm/SignUpForm';
+import SignInForm from '../../components/SignInForm/SignInForm';
 import { auth } from '../../store/actions/index';
+import styled from 'styled-components';
 
 class Auth extends Component {
     state = {
@@ -17,7 +19,11 @@ class Auth extends Component {
     //Submit the form
     onSubmitHandler = (e) => {
         e.preventDefault();
-        this.props.onAuthenticate(this.state.email, this.state.password);
+        console.log(e.target.name);
+        if (e.target.name === "signIn")
+            this.props.onSignIn(this.state.email, this.state.password);
+        else
+            this.props.onSignUp(this.state.email, this.state.password);
     }
 
     // onFirstNameChangeHandler = (e) => {
@@ -46,16 +52,26 @@ class Auth extends Component {
     }
 
     render() {
-        console.log(this.props.tokenId);
-        let view = this.props.loading ? <h4>Loading...</h4> : this.props.tokenId ? <Redirect to="/table" /> :
+        console.log(this.props.match.url);
+        let authView = this.props.match.url === "/auth" ?
             <SignUpForm
+                submit={this.onSubmitHandler}
+                email={this.state.email}
+                password={this.state.password}
+                emailChanged={this.onEmailChangeHandler}
+                passwordChanged={this.onPasswordChangeHandler} /> :
+            <SignInForm
                 submit={this.onSubmitHandler}
                 email={this.state.email}
                 password={this.state.password}
                 emailChanged={this.onEmailChangeHandler}
                 passwordChanged={this.onPasswordChangeHandler} />
 
-        let error = this.props.error ? <h4 style={{ color: "red", margin: 10, backgroundColor: "#fff", textAlign: "center", padding: 10 }}>{this.props.error}</h4> : null;
+
+        let view = this.props.loading ? <h4>Loading...</h4> : this.props.tokenId ? <Redirect to="/table" /> : authView;
+
+
+        let error = this.props.error ? <Error>{this.props.error}</Error> : null;
 
         return (
             <div>
@@ -76,9 +92,17 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAuthenticate: (email, password) => dispatch(auth(email, password))
+        onSignUp: (email, password) => dispatch(auth(email, password)),
+        onSignIn: (email, password) => dispatch(auth(email, password))
     }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Auth);
 
+const Error = styled.h4`
+    color: #cf0c1e; 
+    margin: 10px; 
+    background-color: #fff; 
+    text-align: center; 
+    padding: 10px
+`;
