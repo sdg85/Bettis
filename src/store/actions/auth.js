@@ -21,12 +21,23 @@ export const authSuccess = tokenId => {
     }
 }
 
-export const auth = (email, password) => {
+export const auth = (email, password, signUp) => {
     return async dispatch => {
         dispatch(authStart());
         try{
-            const response = await Axios.post("https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyDlks0ftHoJqUAC2Hph5JTm6xhsIMJ4Flg", { email, password, returnSecureToken: true });
+            console.log(email, password);
+            let response = null;
+            if(signUp){
+                console.log(signUp, "signing up!");
+                response = await Axios.post("https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyDlks0ftHoJqUAC2Hph5JTm6xhsIMJ4Flg", { email, password, returnSecureToken: true });
+            }
+            else{
+                console.log(signUp, "signing in!");
+                response = await Axios.post("https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyDlks0ftHoJqUAC2Hph5JTm6xhsIMJ4Flg", { email, password, returnSecureToken: true });
+            }
+            
             const token = response.data.idToken;
+            console.log(token);
             dispatch(authSuccess(token));
         }
         catch(error){

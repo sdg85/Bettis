@@ -19,11 +19,9 @@ class Auth extends Component {
     //Submit the form
     onSubmitHandler = (e) => {
         e.preventDefault();
-        console.log(e.target.name);
-        if (e.target.name === "signIn")
-            this.props.onSignIn(this.state.email, this.state.password);
-        else
-            this.props.onSignUp(this.state.email, this.state.password);
+
+        const signUp = e.target.name === "signup" ? true : false;
+        this.props.onAuth(this.state.email, this.state.password, signUp);
     }
 
     // onFirstNameChangeHandler = (e) => {
@@ -52,8 +50,8 @@ class Auth extends Component {
     }
 
     render() {
-        console.log(this.props.match.url);
-        let authView = this.props.match.url === "/auth" ?
+        // console.log(this.props.location);
+        let authView = this.props.match.url === "/signup" ?
             <SignUpForm
                 submit={this.onSubmitHandler}
                 email={this.state.email}
@@ -68,7 +66,9 @@ class Auth extends Component {
                 passwordChanged={this.onPasswordChangeHandler} />
 
 
-        let view = this.props.loading ? <h4>Loading...</h4> : this.props.tokenId ? <Redirect to="/table" /> : authView;
+        let view = this.props.loading ? <h4>Loading...</h4> : this.props.tokenId ? <Redirect to={{
+            pathname: this.props.location.state ? this.props.location.state.from : "/table"
+        }} /> : authView;
 
 
         let error = this.props.error ? <Error>{this.props.error}</Error> : null;
@@ -92,8 +92,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onSignUp: (email, password) => dispatch(auth(email, password)),
-        onSignIn: (email, password) => dispatch(auth(email, password))
+        onAuth: (email, password, signUp) => dispatch(auth(email, password, signUp))
     }
 }
 

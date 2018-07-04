@@ -22,6 +22,7 @@ class App extends Component {
             <Route path="/auth" component={Auth} />
             <Route path="/" exact component={Betting} />
             <Route path="/signin" component={Auth} />
+            <Route path="/signup" component={Auth} />
           </Switch>
         </Container>
       </BrowserRouter>

@@ -1,9 +1,10 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 const signInForm = props => {
     return (
-        <Form onSubmit={props.submit} name="signIn">
+        <Form onSubmit={props.submit} name="signin">
         <div>
             <h2>Sign In</h2>
         </div>
@@ -11,13 +12,15 @@ const signInForm = props => {
                 value={props.username}
                 type="text"
                 placeholder="Email..."
-                onChange={props.usernameChanged} />
+                onChange={props.emailChanged} />
             <Input
                 value={props.password}
                 type="password"
                 placeholder="Passoword..."
                 onChange={props.passwordChanged} />
             <Button type="submit" >Sign in</Button>
+            <br/>
+            <NavLink to="/signup" >Not a member? Click here</NavLink>
         </Form>
     );
 }

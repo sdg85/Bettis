@@ -30,7 +30,7 @@ class Betting extends Component {
   render() {
 
     let view = null;
-    
+
     if (this.props.tokenId) {
       view = this.props.fixtures ? this.props.fixtures.map(fixture => {
         const bets = this.props.bets;
@@ -43,7 +43,10 @@ class Betting extends Component {
       }) : "NO MATCHES TODAY";
     }
     else {
-      view = <Redirect to="/signin" />;
+      view = <Redirect to={{
+        pathname: "/signin",
+        state: { from: "/" }
+      }} />;
     }
 
     return (

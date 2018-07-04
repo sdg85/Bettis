@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { withRouter } from 'react-router-dom';
+import { withRouter, NavLink } from 'react-router-dom';
 
 const signUpForm = props => {
     return (
-        <Form onSubmit={props.submit} name="signUp">
+        <Form onSubmit={props.submit} name="signup">
             <div>
                 <h2>Sign Up</h2>
             </div>
@@ -31,7 +31,8 @@ const signUpForm = props => {
                 placeholder="Passoword"
                 onChange={props.passwordChanged} />
             <Button type="submit" >Sign Up</Button>
-            <Button type="button" onClick={() => props.history.push("/signin")} >Already a member? Sign in here!</Button>
+            <br/>
+            <NavLink to="/signin" >Already a member? Click here</NavLink>
         </Form>
     );
 }
