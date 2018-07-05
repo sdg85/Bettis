@@ -28,12 +28,11 @@ export const auth = (email, password, signUp) => {
             console.log(email, password);
             let response = null;
             if(signUp){
-                console.log(signUp, "signing up!");
-                response = await Axios.post("https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyDlks0ftHoJqUAC2Hph5JTm6xhsIMJ4Flg", { email, password, returnSecureToken: true });
+                response = await Axios.post("https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=" + process.env.REACT_APP_FIREBASE_API, { email, password, returnSecureToken: true });
             }
             else{
-                console.log(signUp, "signing in!");
-                response = await Axios.post("https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyDlks0ftHoJqUAC2Hph5JTm6xhsIMJ4Flg", { email, password, returnSecureToken: true });
+                console.log(process.env.REACT_APP_FIREBASE_API);
+                response = await Axios.post("https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=" + process.env.REACT_APP_FIREBASE_API, { email, password, returnSecureToken: true });
             }
             
             const token = response.data.idToken;

@@ -36,11 +36,12 @@ export const initBets = () => {
 }
 
 export const saveNewBet = bet => {
-    return async dispatch => {
+    return async (dispatch, getState) => {
         try {
+            const token = getState().auth.tokenId;
             const betValues = Object.values(bet)[0];
             dispatch(addBet(betValues));
-            await axios.patch("https://bettis-app.firebaseio.com/bets.json", bet);
+            await axios.patch("https://bettis-app.firebaseio.com/bets.json?auth=" + token, bet);
         }
         catch (e) {
             console.log(e);
