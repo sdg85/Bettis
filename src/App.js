@@ -14,11 +14,7 @@ class App extends Component {
         <Container>
           <Toolbar />
           <Switch>
-            <Route path="/table" render={ render => {
-              return (
-                <h1>Table Page</h1>
-              );
-            }} />
+            <Route path="/table" render={render => <h1>Table Page</h1>} />
             <Route path="/auth" component={Auth} />
             <Route path="/" exact component={Betting} />
             <Route path="/signin" component={Auth} />

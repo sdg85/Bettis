@@ -50,11 +50,12 @@ export const saveNewBet = bet => {
 
 }
 export const saveChangedBet = bet => {
-    return async dispatch => {
+    return async (dispatch, getState) => {
         try {
+            const token = getState().auth.tokenId;
             const betValues = Object.values(bet)[0];
             dispatch(changeBet(betValues));
-            await axios.patch("https://bettis-app.firebaseio.com/bets.json", bet);
+            await axios.patch("https://bettis-app.firebaseio.com/bets.json?auth=" + token, bet);
         }
         catch (e) {
             console.log(e);
@@ -63,22 +64,29 @@ export const saveChangedBet = bet => {
 }
 
 export const deleteBet = fixtureId => {
-    return async dispatch => {
+    return async (dispatch, getState) => {
         dispatch(removeBet(fixtureId));
-        try{
-            await axios.delete("https://bettis-app.firebaseio.com/bets/" + fixtureId + ".json");
+        try {
+            const token = getState().auth.tokenId;
+            await axios.delete("https://bettis-app.firebaseio.com/bets/" + fixtureId + ".json?auth=" + token);
         }
-        catch(e){
+        catch (e) {
             console.log(e);
         }
-        
+
     }
 }
 
 export const fetchBets = () => {
-    return async dispatch => {
-        const betsData = await axios.get("https://bettis-app.firebaseio.com/bets.json");
-        const bets = betsData.data ? Object.values(betsData.data) : [];
-        dispatch(getBets(bets));
+    return async (dispatch, getState) => {
+        try {
+            const token = getState().auth.tokenId;
+            const betsData = await axios.get("https://bettis-app.firebaseio.com/bets.json?auth=" + token);
+            const bets = betsData.data ? Object.values(betsData.data) : [];
+            dispatch(getBets(bets));
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
 }

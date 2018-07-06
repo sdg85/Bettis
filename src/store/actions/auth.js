@@ -25,7 +25,6 @@ export const auth = (email, password, signUp) => {
     return async dispatch => {
         dispatch(authStart());
         try{
-            console.log(email, password);
             let response = null;
             if(signUp){
                 response = await Axios.post("https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=" + process.env.REACT_APP_FIREBASE_API, { email, password, returnSecureToken: true });
@@ -35,7 +34,6 @@ export const auth = (email, password, signUp) => {
             }
             
             const token = response.data.idToken;
-            console.log(token);
             dispatch(authSuccess(token));
         }
         catch(error){

@@ -39,7 +39,6 @@ export const fetchTodaysFixtures = () => {
             let flags = getState().fixturesReducer.flags;
             //Get flags for all teams if there not already fetched.
             if (flags.length === 0) {
-                console.log("there is no flags");
                 const flagsData = await axios.get("https://bettis-app.firebaseio.com/flags.json");
                 flags = flagsData.data;
                 dispatch(getFlags(flags));
@@ -47,11 +46,10 @@ export const fetchTodaysFixtures = () => {
             
             const today = moment(new Date());
             const fromDate = today.format("YYYY-MM-DD");
-            const toDate = today.add(2, 'days').format("YYYY-MM-DD");
+            const toDate = today.add(1, 'days').format("YYYY-MM-DD");
             const fixturesData = await axios.get("http://api.football-data.org/v2/competitions/2000/matches?dateFrom=" + fromDate + "&dateTo=" + toDate, headersConf);
 
             const fixtures = fixturesData.data.matches.map(fixture => {
-                console.log(fixture);
                 const homeFlag = flags.find(flag => flag.teamName === fixture.homeTeam.name);
                 const awayFlag = flags.find(flag => flag.teamName === fixture.awayTeam.name);
 
@@ -70,11 +68,9 @@ export const fetchTodaysFixtures = () => {
                     winner: fixture.winner
                 }
             });
-            console.log(fixtures);
             dispatch(todaysFixturesSuccess(fixtures));
         }
         catch (error) {
-            console.log(error);
             dispatch(todaysFixturesFail(error));
         }
     }

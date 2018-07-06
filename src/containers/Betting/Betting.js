@@ -52,10 +52,10 @@ class Betting extends Component {
     }) : "NO MATCHES TODAY";
 
     return (
-      <div>
+      <FixturesContainer>
         {errorMessage}
         {view}
-      </div>
+      </FixturesContainer>
     );
   }
 }
@@ -86,6 +86,14 @@ const MessageContainer = styled.div`
   color: #cf0c1e; 
   background-color: #fff;
   padding: 5px;
+`;
+
+const FixturesContainer = styled.div`
+  @media(min-width: 800px){
+        width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+  }
 `;
 
 export default connect(mapStateToProps, mapDispatchToProps)(Betting);

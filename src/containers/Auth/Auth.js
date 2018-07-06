@@ -24,18 +24,6 @@ class Auth extends Component {
         this.props.onAuth(this.state.email, this.state.password, signUp);
     }
 
-    // onFirstNameChangeHandler = (e) => {
-    //     this.setState({
-    //         firstName: e.target.value
-    //     });
-    // }
-
-    // onLastNameChangeHandler = (e) => {
-    //     this.setState({
-    //         lastName: e.target.value
-    //     });
-    // }
-
     //Store characters from email input to the state
     onEmailChangeHandler = (e) => {
         this.setState({
