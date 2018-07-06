@@ -37,7 +37,6 @@ export const fetchTodaysFixtures = () => {
             dispatch(todaysFixturesStart());
             //Get flags from state
             let flags = getState().fixturesReducer.flags;
-            console.log(flags);
             //Get flags for all teams if there not already fetched.
             if (flags.length === 0) {
                 console.log("there is no flags");
@@ -51,8 +50,8 @@ export const fetchTodaysFixtures = () => {
             const toDate = today.add(2, 'days').format("YYYY-MM-DD");
             const fixturesData = await axios.get("http://api.football-data.org/v2/competitions/2000/matches?dateFrom=" + fromDate + "&dateTo=" + toDate, headersConf);
 
-            console.log(fixturesData.data.matches);
             const fixtures = fixturesData.data.matches.map(fixture => {
+                console.log(fixture);
                 const homeFlag = flags.find(flag => flag.teamName === fixture.homeTeam.name);
                 const awayFlag = flags.find(flag => flag.teamName === fixture.awayTeam.name);
 
@@ -66,12 +65,13 @@ export const fetchTodaysFixtures = () => {
                     awayTeamFlagUrl: awayFlag ? awayFlag.flagUrl : "",
                     goalHomeTeam: fixture.score.halfTime.homeTeam || 0 + fixture.score.fullTime.homeTeam || 0 + fixture.score.extraTime.homeTeam || 0,
                     goalAwayTeam: fixture.score.halfTime.awayTeam || 0 + fixture.score.fullTime.awayTeam || 0 + fixture.score.extraTime.awayTeam || 0,
-                    penaltiesHomeTeam: fixture.penalties.homeTeam, 
-                    penaltiesAwayTeam: fixture.penalties.awayTeam, 
+                    penaltiesHomeTeam: fixture.score.penalties.homeTeam, 
+                    penaltiesAwayTeam: fixture.score.penalties.awayTeam, 
                     winner: fixture.winner
                 }
             });
-            // dispatch(todaysFixturesSuccess(fixtures));
+            console.log(fixtures);
+            dispatch(todaysFixturesSuccess(fixtures));
         }
         catch (error) {
             console.log(error);
