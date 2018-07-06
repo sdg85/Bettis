@@ -31,7 +31,6 @@ export const auth = (email, password, signUp) => {
                 response = await Axios.post("https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=" + process.env.REACT_APP_FIREBASE_API, { email, password, returnSecureToken: true });
             }
             else{
-                console.log(process.env.REACT_APP_FIREBASE_API);
                 response = await Axios.post("https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=" + process.env.REACT_APP_FIREBASE_API, { email, password, returnSecureToken: true });
             }
             
