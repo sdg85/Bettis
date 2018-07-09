@@ -46,7 +46,7 @@ export const fetchTodaysFixtures = () => {
             
             const today = moment(new Date());
             const fromDate = today.format("YYYY-MM-DD");
-            const toDate = today.add(1, 'days').format("YYYY-MM-DD");
+            const toDate = today.add(2, 'days').format("YYYY-MM-DD");
             const fixturesData = await axios.get("http://api.football-data.org/v2/competitions/2000/matches?dateFrom=" + fromDate + "&dateTo=" + toDate, headersConf);
 
             const fixtures = fixturesData.data.matches.map(fixture => {

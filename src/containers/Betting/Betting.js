@@ -10,7 +10,7 @@ class Betting extends Component {
     if (!this.props.authenticated)
       this.props.history.push("/signin");
     else {
-      // this.props.onGetBets();
+      this.props.onGetBets();
       this.props.onFetchTodaysFixtures();
     }
 
@@ -18,16 +18,19 @@ class Betting extends Component {
 
   onClickedFixture = (choice, fixtureId) => {
     const oldBet = this.props.bets.find(bet => bet.fixtureId === fixtureId);
-
+    if(!this.props.tokenId){
+      this.props.history.push("/signin");
+      return;
+    }
     if (oldBet && oldBet.bet === choice) {
       this.props.onRemoveBet(oldBet.fixtureId);
     }
     else if (oldBet) {
-      const bet = { [fixtureId]: { fixtureId: fixtureId, bet: choice } };
+      const bet = { [fixtureId + "_" + this.props.userId]: { fixtureId: fixtureId, bet: choice, userId: this.props.userId } };
       this.props.onChangeBet(bet);
     }
     else {
-      const bet = { [fixtureId]: { fixtureId: fixtureId, bet: choice } };
+      const bet = { [fixtureId + "_" + this.props.userId]: { fixtureId: fixtureId, bet: choice, userId: this.props.userId } };
       this.props.onSaveBet(bet);
     }
   }
@@ -41,7 +44,7 @@ class Betting extends Component {
       view = <MessageContainer><h4>Loading....</h4></MessageContainer>
     }
 
-    view = this.props.fixtures ? this.props.fixtures.map(fixture => {
+    view = this.props.fixtures.length > 0 ? this.props.fixtures.map(fixture => {
       const bets = this.props.bets;
       const bet = bets ? bets.find(bet => bet.fixtureId === fixture.id) : null;
       return <Fixture
@@ -49,7 +52,7 @@ class Betting extends Component {
         bet={bet}
         fixture={fixture}
         clicked={this.onClickedFixture} />
-    }) : "NO MATCHES TODAY";
+    }) : <NoGames>NO GAMES TODAY :(</NoGames>;
 
     return (
       <FixturesContainer>
@@ -61,11 +64,11 @@ class Betting extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log(state.fixturesReducer.loading);
   return {
     fixtures: state.fixturesReducer.fixtures,
     bets: state.betsReducer.bets,
     authenticated: state.auth.tokenId ? true : false,
+    userId: state.auth.userId,
     error: state.fixturesReducer.error,
     loading: state.fixturesReducer.loading
   }
@@ -93,6 +96,17 @@ const FixturesContainer = styled.div`
         width: 800px;
         margin-left: auto;
         margin-right: auto;
+  }
+`;
+
+const NoGames = styled.h2`
+  background-color: rgba(255,255,255,0.9);
+  color: #cf0c1e;
+  text-align: center;
+  padding: 10px;
+
+  @media(max-width: 800px){
+    margin: 0 10px
   }
 `;
 

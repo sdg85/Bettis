@@ -1,4 +1,4 @@
-import { REMOVE_BET, GET_BETS, ADD_BET, CHANGE_BET } from './actionTypes';
+import { REMOVE_BET, GET_BETS, ADD_BET, CHANGE_BET, BET_FAIL } from './actionTypes';
 import axios from 'axios';
 
 export const getBets = bets => {
@@ -8,6 +8,12 @@ export const getBets = bets => {
     }
 }
 
+export const betFail = error => {
+    return {
+        type: BET_FAIL,
+        error
+    }
+}
 export const removeBet = fixtureId => {
     return {
         type: REMOVE_BET,
@@ -43,8 +49,8 @@ export const saveNewBet = bet => {
             dispatch(addBet(betValues));
             await axios.patch("https://bettis-app.firebaseio.com/bets.json?auth=" + token, bet);
         }
-        catch (e) {
-            console.log(e);
+        catch (error) {
+            dispatch(betFail(error));
         }
     }
 
@@ -57,8 +63,8 @@ export const saveChangedBet = bet => {
             dispatch(changeBet(betValues));
             await axios.patch("https://bettis-app.firebaseio.com/bets.json?auth=" + token, bet);
         }
-        catch (e) {
-            console.log(e);
+        catch (error) {
+            dispatch(betFail(error));
         }
     }
 }
@@ -70,8 +76,8 @@ export const deleteBet = fixtureId => {
             const token = getState().auth.tokenId;
             await axios.delete("https://bettis-app.firebaseio.com/bets/" + fixtureId + ".json?auth=" + token);
         }
-        catch (e) {
-            console.log(e);
+        catch (error) {
+            dispatch(betFail(error));
         }
 
     }
@@ -80,13 +86,15 @@ export const deleteBet = fixtureId => {
 export const fetchBets = () => {
     return async (dispatch, getState) => {
         try {
-            const token = getState().auth.tokenId;
-            const betsData = await axios.get("https://bettis-app.firebaseio.com/bets.json?auth=" + token);
+            const authReducer = getState().auth;
+            const token = authReducer.tokenId;
+            const userId = authReducer.userId;
+            const betsData = await axios.get('https://bettis-app.firebaseio.com/bets.json?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"');
             const bets = betsData.data ? Object.values(betsData.data) : [];
             dispatch(getBets(bets));
         }
         catch (error) {
-            console.log(error);
+            dispatch(betFail(error));
         }
     }
 }

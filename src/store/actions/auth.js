@@ -1,4 +1,4 @@
-import { AUTH_START, AUTH_SUCCESS, AUTH_FAIL } from './actionTypes';
+import { AUTH_START, AUTH_SUCCESS, AUTH_FAIL, AUTH_LOGOUT } from './actionTypes';
 import Axios from 'axios';
 
 export const authStart = () => {
@@ -14,10 +14,25 @@ export const authFail = error => {
     }
 }
 
-export const authSuccess = tokenId => {
+export const authSuccess = (tokenId, userId) => {
     return {
         type: AUTH_SUCCESS,
-        tokenId
+        tokenId,
+        userId
+    }
+}
+
+export const authLogout = () => {
+    return {
+        type: AUTH_LOGOUT
+    }
+}
+
+const logoutTimeOut = expirationTime => {
+    return dispatch => {
+        setTimeout( () => {
+            dispatch(authLogout());
+        },5000)
     }
 }
 
@@ -34,7 +49,9 @@ export const auth = (email, password, signUp) => {
             }
             
             const token = response.data.idToken;
-            dispatch(authSuccess(token));
+            const userId = response.data.localId;
+            dispatch(logoutTimeOut(response.data.expirationTime));
+            dispatch(authSuccess(token, userId));
         }
         catch(error){
             let errorMessage = '';

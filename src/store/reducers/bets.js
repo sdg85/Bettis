@@ -1,8 +1,9 @@
-import { GET_BETS, REMOVE_BET, ADD_BET, CHANGE_BET } from "../actions/actionTypes";
+import { GET_BETS, REMOVE_BET, ADD_BET, CHANGE_BET, BET_FAIL } from "../actions/actionTypes";
 
 const initialState = {
     bets: [],
-    loading: false
+    loading: false,
+    error: null
 }
 
 
@@ -27,6 +28,11 @@ const betsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 bets: state.bets.filter(bet => bet.fixtureId !== action.fixtureId)
+            }
+            case BET_FAIL:
+            return {
+                ...state,
+                error: action.error
             }
         default: return state;
     }
