@@ -53,7 +53,6 @@ class Auth extends Component {
                 emailChanged={this.onEmailChangeHandler}
                 passwordChanged={this.onPasswordChangeHandler} />
 
-
         let view = this.props.loading ? <h4>Loading...</h4> : this.props.tokenId ? <Redirect to={{
             pathname: this.props.location.state ? this.props.location.state.from : "/table"
         }} /> : authView;

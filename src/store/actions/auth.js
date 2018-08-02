@@ -32,7 +32,7 @@ const logoutTimeOut = expirationTime => {
     return dispatch => {
         setTimeout( () => {
             dispatch(authLogout());
-        },5000)
+        },expirationTime * 1000)
     }
 }
 
@@ -50,7 +50,7 @@ export const auth = (email, password, signUp) => {
             
             const token = response.data.idToken;
             const userId = response.data.localId;
-            dispatch(logoutTimeOut(response.data.expirationTime));
+            dispatch(logoutTimeOut(response.data.expiresIn));
             dispatch(authSuccess(token, userId));
         }
         catch(error){

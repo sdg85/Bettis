@@ -1,38 +1,71 @@
-import { GET_BETS, REMOVE_BET, ADD_BET, CHANGE_BET, BET_FAIL } from "../actions/actionTypes";
+import {
+    BETS_START,
+    BETS_FAIL,
+    GET_BETS_SUCCESS,
+    GET_USER_BETS_SUCCESS,
+    ADD_USER_BET_SUCCESS,
+    REMOVE_USER_BET_SUCCESS,
+    CHANGE_USER_BET_SUCCESS,
+    BET_START
+} from "../actions/actionTypes";
 
 const initialState = {
-    bets: [],
+    allBets:[],
+    userBets: [],
     loading: false,
+    betLoading: null,
     error: null
 }
 
 
 const betsReducer = (state = initialState, action) => {
     switch (action.type) {
-        case GET_BETS:
+        case BETS_START:
+        return {
+            ...state,
+            loading: true
+        }
+        case BET_START: 
+        return {
+            ...state,
+            betLoading: action.bet
+        }
+        case GET_BETS_SUCCESS:
+        return {
+            ...state,
+            allBets: action.bets,
+            loading: false
+        }
+        case GET_USER_BETS_SUCCESS:
             return {
                 ...state,
-                bets: state.bets.concat(action.bets) 
+                userBets: state.userBets.concat(action.userBets),
+                loading: false
             }
-            case ADD_BET:
+        case ADD_USER_BET_SUCCESS:
             return {
                 ...state,
-                bets: state.bets.concat(action.bet)
+                userBets: state.userBets.concat(action.userBet),
+                betLoading: null
             }
-            case CHANGE_BET:
+        case CHANGE_USER_BET_SUCCESS:
             return {
                 ...state,
-                bets: state.bets.filter(bet => bet.fixtureId !== action.bet.fixtureId).concat(action.bet)
+                userBets: state.userBets.filter(bet => bet.fixtureId !== action.userBet.fixtureId).concat(action.userBet),
+                betLoading: null
             }
-            case REMOVE_BET:
+        case REMOVE_USER_BET_SUCCESS:
             return {
                 ...state,
-                bets: state.bets.filter(bet => bet.fixtureId !== action.fixtureId)
+                userBets: state.userBets.filter(bet => bet.betId !== action.betId),
+                betLoading: null
             }
-            case BET_FAIL:
+        case BETS_FAIL:
             return {
                 ...state,
-                error: action.error
+                error: action.error,
+                loading: false,
+                betLoading: null
             }
         default: return state;
     }

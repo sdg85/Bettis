@@ -1,42 +1,54 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchTodaysFixtures, saveNewBet, fetchBets, saveChangedBet, deleteBet } from '../../store/actions/index';
+import { fetchTodaysFixtures, saveNewUserBet, fetchUserBets, saveChangedUserBet, deleteUserBet, fetchAllBets, fetchAllFixtures } from '../../store/actions/index';
 import Fixture from '../../components/Fixtures/Fixture/Fixture';
 import styled from 'styled-components';
 
 class Betting extends Component {
 
-  componentDidMount() {
-    if (!this.props.authenticated)
-      this.props.history.push("/signin");
+  async componentDidMount() {
+    //if not authenticated then nav to login page
+    if (!this.props.authenticated) {
+      console.log(this.props);
+      this.props.history.push({ pathname: "/signin", state: { from: "/" } });
+    }
     else {
-      this.props.onGetBets();
+      //if authenticated then get user bets and todays fixtures
+      await this.props.onFetchAllFixtures();
+      this.props.onGetUserBets();
       this.props.onFetchTodaysFixtures();
     }
-
   }
 
   onClickedFixture = (choice, fixtureId) => {
-    const oldBet = this.props.bets.find(bet => bet.fixtureId === fixtureId);
-    if(!this.props.tokenId){
+    const betsArray = Object.values(this.props.userBets);
+
+    const oldBet = betsArray.find(bet => bet.fixtureId === fixtureId);
+    console.log(oldBet);
+    const userBet = fixtureId + "_" + this.props.userId;
+
+    if (!this.props.authenticated) {
       this.props.history.push("/signin");
-      return;
     }
-    if (oldBet && oldBet.bet === choice) {
-      this.props.onRemoveBet(oldBet.fixtureId);
+    else if (oldBet && oldBet.bet === choice) {
+      console.log("remove bet: ", userBet);
+      const bet = { betId: userBet, fixtureId: fixtureId };
+      this.props.onRemoveBet(bet);
     }
     else if (oldBet) {
-      const bet = { [fixtureId + "_" + this.props.userId]: { fixtureId: fixtureId, bet: choice, userId: this.props.userId } };
+      const bet = { [userBet]: { betId: userBet, fixtureId: fixtureId, bet: choice, userId: this.props.userId } };
+      console.log("change bet: ", bet);
       this.props.onChangeBet(bet);
     }
     else {
-      const bet = { [fixtureId + "_" + this.props.userId]: { fixtureId: fixtureId, bet: choice, userId: this.props.userId } };
+      const bet = { [userBet]: { betId: userBet, fixtureId: fixtureId, bet: choice, userId: this.props.userId } };
+      console.log("new bet", bet);
       this.props.onSaveBet(bet);
     }
   }
 
   render() {
-
+    console.log(this.props.userBets);
     let view = null;
     let errorMessage = this.props.error ? <MessageContainer><h4>{`${this.props.error}`}</h4></MessageContainer> : null;
 
@@ -44,14 +56,20 @@ class Betting extends Component {
       view = <MessageContainer><h4>Loading....</h4></MessageContainer>
     }
 
-    view = this.props.fixtures.length > 0 ? this.props.fixtures.map(fixture => {
-      const bets = this.props.bets;
-      const bet = bets ? bets.find(bet => bet.fixtureId === fixture.id) : null;
+    const bets = this.props.userBets;
+    console.log(bets);
+    view = this.props.loading ? "Loading..." : this.props.todaysFixtures.length > 0 ? this.props.todaysFixtures.map(fixture => 
+      {
+      const bet = bets.length > 0 ? bets.find(bet => bet.fixtureId === fixture.id) : null;
+      console.log(this.props.betLoading);
+      
       return <Fixture
         key={fixture.id}
+        loading={this.props.betLoading ? this.props.betLoading.fixtureId === fixture.id : false}
         bet={bet}
         fixture={fixture}
         clicked={this.onClickedFixture} />
+
     }) : <NoGames>NO GAMES TODAY :(</NoGames>;
 
     return (
@@ -65,22 +83,25 @@ class Betting extends Component {
 
 const mapStateToProps = state => {
   return {
-    fixtures: state.fixturesReducer.fixtures,
-    bets: state.betsReducer.bets,
+    todaysFixtures: state.fixturesReducer.todaysFixtures,
+    allFixtures: state.fixturesReducer.allFixtures,
+    userBets: state.betsReducer.userBets,
     authenticated: state.auth.tokenId ? true : false,
     userId: state.auth.userId,
     error: state.fixturesReducer.error,
-    loading: state.fixturesReducer.loading
+    loading: state.fixturesReducer.loading,
+    betLoading: state.betsReducer.betLoading
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
     onFetchTodaysFixtures: () => dispatch(fetchTodaysFixtures()),
-    onSaveBet: bet => dispatch(saveNewBet(bet)),
-    onRemoveBet: fixtureId => dispatch(deleteBet(fixtureId)),
-    onGetBets: () => dispatch(fetchBets()),
-    onChangeBet: (bet) => dispatch(saveChangedBet(bet))
+    onFetchAllFixtures: () => dispatch(fetchAllFixtures()),
+    onGetUserBets: () => dispatch(fetchUserBets()),
+    onSaveBet: bet => dispatch(saveNewUserBet(bet)),
+    onRemoveBet: bet => dispatch(deleteUserBet(bet)),
+    onChangeBet: (bet) => dispatch(saveChangedUserBet(bet))
   }
 }
 

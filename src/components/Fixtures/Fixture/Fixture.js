@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
+import BetSpinner from '../../UI/Spinners/BetSpinner/BetSpinner';
 
 const fixture = props => {
     const fixture = props.fixture;
     const matchDateTime = fixture ? moment(fixture.date).format("YYYY-MM-DD HH:mm") : "";
-    
+
     let view = fixture ?
         <FixtureContainer date={matchDateTime}>
             <Header date={matchDateTime}>{matchDateTime}</Header>
@@ -23,7 +24,7 @@ const fixture = props => {
                     <Vs date={matchDateTime}>Vs</Vs>
                     {
                         dateTime() > matchDateTime ?
-                            <div style={{textAlign: "center"}}>
+                            <div style={{ textAlign: "center" }}>
                                 <h5>{`${fixture.goalHomeTeam} - ${fixture.goalAwayTeam}`}</h5>
                             </div>
                             : null
@@ -36,24 +37,26 @@ const fixture = props => {
                     </TeamNameContainer>
                 </Team>
             </TeamsContainer>
-            <BetContainer>
-                <Bet
-                    id="homeTeam"
-                    date={matchDateTime}
-                    onClick={() => matchDateTime > dateTime() ? props.clicked("homeTeam", fixture.id, fixture.date) : null}
-                    bet={props.bet} >1</Bet>
-                <Bet
-                    id="draw"
-                    date={matchDateTime}
-                    onClick={() => matchDateTime > dateTime() ? props.clicked("draw", fixture.id, fixture.date) : null}
-                    bet={props.bet} >X</Bet>
-                <Bet
-                    id="awayTeam"
-                    date={matchDateTime}
-                    onClick={() => matchDateTime > dateTime() ? props.clicked("awayTeam", fixture.id, fixture.date) : null}
-                    bet={props.bet} >2</Bet>
-            </BetContainer>
-        </FixtureContainer> : "No Games today :(";
+            {
+                props.loading ? <BetSpinner /> : <BetContainer>
+                    <Bet
+                        id="HOME_TEAM"
+                        date={matchDateTime}
+                        onClick={() => matchDateTime > dateTime() ? props.clicked("HOME_TEAM", fixture.id, fixture.date) : null}
+                        bet={props.bet} >1</Bet>
+                    <Bet
+                        id="DRAW"
+                        date={matchDateTime}
+                        onClick={() => matchDateTime > dateTime() ? props.clicked("DRAW", fixture.id, fixture.date) : null}
+                        bet={props.bet} >X</Bet>
+                    <Bet
+                        id="AWAY_TEAM"
+                        date={matchDateTime}
+                        onClick={() => matchDateTime > dateTime() ? props.clicked("AWAY_TEAM", fixture.id, fixture.date) : null}
+                        bet={props.bet} >2</Bet>
+                </BetContainer>
+            }
+        </FixtureContainer> : null;
 
     return (
         view
