@@ -69,7 +69,7 @@ export const fetchAllFixtures = () => {
             const fromDate = moment(new Date("2018-06-14")).format("YYYY-MM-DD");
             const toDate = moment(new Date("2018-07-15")).format("YYYY-MM-DD");
 
-            const fixturesData = await axios.get("http://api.football-data.org/v2/competitions/2000/matches?dateFrom=" + fromDate + "&dateTo=" + toDate, headersConf);
+            const fixturesData = await axios.get("https://api.football-data.org/v2/competitions/2000/matches?dateFrom=" + fromDate + "&dateTo=" + toDate, headersConf);
             
             //Get flags from state
             let flags = getState().fixturesReducer.flags;
@@ -88,7 +88,7 @@ export const fetchAllFixtures = () => {
                     id: fixture.id,
                     status: fixture.status,
                     // date: fixture.utcDate,
-                    date: moment(fixture.utcDate).add(1, 'months').format("YYYY-MM-DD"),
+                    date: moment(fixture.utcDate).add(1, 'months').format("YYYY-MM-DD HH:mm"),
                     homeTeamName: fixture.homeTeam.name,
                     homeTeamFlagUrl: homeFlag ? homeFlag.flagUrl : "",
                     awayTeamName: fixture.awayTeam.name,
@@ -115,12 +115,21 @@ export const fetchTodaysFixtures = () => {
         try {
             dispatch(todaysFixturesStart());
             
-
             const today = moment(new Date());
             const fromDate = today.format("YYYY-MM-DD");
-            const toDate = today.add(2, 'days').format("YYYY-MM-DD");
+            let toDate = today.add(2, 'days').format("YYYY-MM-DD");
+            const finalDay = moment(new Date("2018-08-15")).format("YYYY-MM-DD");
+            let todaysFixtures = [];
+            let counter = 0;
+            
+            //Check each day for fixtures, if no fixtures found then move to the next day. 
+            //The loop stops when it finds fixtures.
+            while(todaysFixtures.length === 0 && toDate <= finalDay){
+                counter++;
+                todaysFixtures = getState().fixturesReducer.allFixtures.filter(fixture => fixture.date >= fromDate && fixture.date <= toDate);
+                toDate = moment(new Date(toDate)).add(counter, 'days').format("YYYY-MM-DD");
+            }
 
-            const todaysFixtures = getState().fixturesReducer.allFixtures.filter(fixture => fixture.date >= fromDate && fixture.date <= toDate);
             dispatch(todaysFixturesSuccess(todaysFixtures));
         }
         catch (error) {

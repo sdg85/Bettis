@@ -9,7 +9,6 @@ class Betting extends Component {
   async componentDidMount() {
     //if not authenticated then nav to login page
     if (!this.props.authenticated) {
-      console.log(this.props);
       this.props.history.push({ pathname: "/signin", state: { from: "/" } });
     }
     else {
@@ -48,7 +47,6 @@ class Betting extends Component {
   }
 
   render() {
-    console.log(this.props.userBets);
     let view = null;
     let errorMessage = this.props.error ? <MessageContainer><h4>{`${this.props.error}`}</h4></MessageContainer> : null;
 
@@ -57,11 +55,9 @@ class Betting extends Component {
     }
 
     const bets = this.props.userBets;
-    console.log(bets);
     view = this.props.loading ? "Loading..." : this.props.todaysFixtures.length > 0 ? this.props.todaysFixtures.map(fixture => 
       {
       const bet = bets.length > 0 ? bets.find(bet => bet.fixtureId === fixture.id) : null;
-      console.log(this.props.betLoading);
       
       return <Fixture
         key={fixture.id}

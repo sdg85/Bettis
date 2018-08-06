@@ -30,7 +30,7 @@ export const getScores = () => {
         const toDate = moment(new Date()).format("YYYY-MM-DD");
 
         try {
-            const fixturesData = await axios.get("http://api.football-data.org/v2/competitions/2000/matches?dateFrom=" + fromDate + "&dateTo=" + toDate, headersConf);
+            const fixturesData = await axios.get("https://api.football-data.org/v2/competitions/2000/matches?dateFrom=" + fromDate + "&dateTo=" + toDate, headersConf);
             
             
             dispatch(scoreSuccess(fixturesData.data.matches));

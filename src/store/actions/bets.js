@@ -124,10 +124,10 @@ export const fetchAllBets = () => {
             const token = getState().auth.tokenId;
             const response = await axios.get('https://bettis-app.firebaseio.com/bets.json?auth=' + token);
             const bets = response.data;
-            
+
             const betsArray = [];
-            
-            for(let key in bets){
+
+            for (let key in bets) {
                 betsArray.push({
                     betId: key,
                     bet: bets[key].bet,
@@ -146,27 +146,32 @@ export const fetchAllBets = () => {
 export const fetchUserBets = () => {
     return async (dispatch, getState) => {
         try {
-            dispatch(betsStart());
-            const authReducer = getState().auth;
-            const token = authReducer.tokenId;
-            const userId = authReducer.userId;
-            const betsData = await axios.get('https://bettis-app.firebaseio.com/bets.json?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"');
-            // const bets = betsData.data ? Object.values(betsData.data) : [];
-            const bets = betsData.data;
-            const betsArray = [];
-            
-            if(bets){
-                for(let key in bets){
-                    betsArray.push({
-                        betId: key,
-                        bet: bets[key].bet,
-                        fixtureId: bets[key].fixtureId,
-                        userId: bets[key].userId
-                    });
+            let allBets = getState().betsReducer.allBets;
+            //check if there's bets else get them from server
+            if (allBets.length === 0) {
+                console.log("fetching bets!");
+                dispatch(betsStart());
+                const authReducer = getState().auth;
+                const token = authReducer.tokenId;
+                const userId = authReducer.userId;
+                const betsData = await axios.get('https://bettis-app.firebaseio.com/bets.json?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"');
+                allBets = betsData.data;
+
+                const betsArray = [];
+
+                if (allBets) {
+                    for (let key in allBets) {
+                        betsArray.push({
+                            betId: key,
+                            bet: allBets[key].bet,
+                            fixtureId: allBets[key].fixtureId,
+                            userId: allBets[key].userId
+                        });
+                    }
                 }
+
+                dispatch(getUserBetsSuccess(betsArray));
             }
-           
-            dispatch(getUserBetsSuccess(betsArray));
         }
         catch (error) {
             dispatch(betsFail(error));

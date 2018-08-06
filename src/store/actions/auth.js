@@ -41,14 +41,20 @@ export const auth = (email, password, signUp) => {
         dispatch(authStart());
         try{
             let response = null;
+            let token = null;
             if(signUp){
                 response = await Axios.post("https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=" + process.env.REACT_APP_FIREBASE_API, { email, password, returnSecureToken: true });
+                token = response.data.idToken;
+                const user = { [response.data.localId]: { username: response.data.email }
+                };
+                
+                const res = await Axios.patch("https://bettis-app.firebaseio.com/users.json?auth=" + token, user);
             }
             else{
                 response = await Axios.post("https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=" + process.env.REACT_APP_FIREBASE_API, { email, password, returnSecureToken: true });
             }
             
-            const token = response.data.idToken;
+            
             const userId = response.data.localId;
             dispatch(logoutTimeOut(response.data.expiresIn));
             dispatch(authSuccess(token, userId));

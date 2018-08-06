@@ -1,12 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
+import logo from '../../../assets/wc_2018_logo.jpg';
 
 const toolbar = props => {
     return (
         <ToolbarContainer>
             <ImgContainer>
-                <img src="https://www.underconsideration.com/brandnew/archives/russia_2018_logo_detail.jpg" height="100px" width="90px" alt="World cup 2018" />
+                <img src={logo} height="100px" width="90px" alt="World cup 2018" />
             </ImgContainer>
             <div style={{ justifyItems: "center", margin: "auto" }}>
                 <Nav to="/" >BET</Nav>
