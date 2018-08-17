@@ -36,25 +36,24 @@ const logoutTimeOut = expirationTime => {
     }
 }
 
-export const auth = (email, password, signUp) => {
+export const auth = (firstname, lastname, email, password, imgUrl, signUp) => {
     return async dispatch => {
         dispatch(authStart());
         try{
             let response = null;
-            let token = null;
+
             if(signUp){
                 response = await Axios.post("https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=" + process.env.REACT_APP_FIREBASE_API, { email, password, returnSecureToken: true });
-                token = response.data.idToken;
-                const user = { [response.data.localId]: { username: response.data.email }
+                const user = { [response.data.localId]: { username: response.data.email, firstname, lastname, imgUrl: imgUrl, userId: response.data.localId }
                 };
                 
-                const res = await Axios.patch("https://bettis-app.firebaseio.com/users.json?auth=" + token, user);
+                const res = await Axios.patch("https://bettis-app.firebaseio.com/users.json?auth=" + response.data.idToken, user);
             }
             else{
                 response = await Axios.post("https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=" + process.env.REACT_APP_FIREBASE_API, { email, password, returnSecureToken: true });
             }
             
-            
+            const token = response.data.idToken;
             const userId = response.data.localId;
             dispatch(logoutTimeOut(response.data.expiresIn));
             dispatch(authSuccess(token, userId));

@@ -8,30 +8,39 @@ const signUpForm = props => {
             <div>
                 <h2>Sign Up</h2>
             </div>
-            {/* <Input
+            <Input
                 type="text"
+                id="firstName"
                 value={props.firstName}
                 onChange={props.firstNameChanged}
                 placeholder="first name"
             />
             <Input
                 type="text"
+                id="lastName"
                 value={props.lastName}
                 onChange={props.lastNameChanged}
                 placeholder="last name"
-            /> */}
+            />
             <Input
                 value={props.email}
+                id="email"
                 type="email"
                 placeholder="Email"
                 onChange={props.emailChanged} />
             <Input
                 value={props.password}
+                id="password"
                 type="password"
                 placeholder="Passoword"
                 onChange={props.passwordChanged} />
+            <UploadContainer>
+                <Input type="file" id="file" placeholder="profile image" onChange={props.fileUploadChanged} />
+            </UploadContainer>
+            {props.imgUrl ? <img src={props.imgUrl} width="100" height="100" alt="Profile" /> : null}
+
             <Button type="submit" >Sign Up</Button>
-            <br/>
+            <br />
             <NavLink to="/signin" >Already a member? Click here</NavLink>
         </Form>
     );
@@ -83,4 +92,8 @@ const Button = styled.button`
         color: #fff;
         border: 2px solid #eee5c6;
     }
+`;
+
+const UploadContainer = styled.div`
+    display: flex;
 `;

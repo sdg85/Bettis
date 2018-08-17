@@ -14,6 +14,7 @@ class Betting extends Component {
     else {
       //if authenticated then get user bets and todays fixtures
       await this.props.onFetchAllFixtures();
+      console.log("bla bla bla");
       this.props.onGetUserBets();
       this.props.onFetchTodaysFixtures();
     }
@@ -23,25 +24,21 @@ class Betting extends Component {
     const betsArray = Object.values(this.props.userBets);
 
     const oldBet = betsArray.find(bet => bet.fixtureId === fixtureId);
-    console.log(oldBet);
     const userBet = fixtureId + "_" + this.props.userId;
 
     if (!this.props.authenticated) {
       this.props.history.push("/signin");
     }
     else if (oldBet && oldBet.bet === choice) {
-      console.log("remove bet: ", userBet);
       const bet = { betId: userBet, fixtureId: fixtureId };
       this.props.onRemoveBet(bet);
     }
     else if (oldBet) {
       const bet = { [userBet]: { betId: userBet, fixtureId: fixtureId, bet: choice, userId: this.props.userId } };
-      console.log("change bet: ", bet);
       this.props.onChangeBet(bet);
     }
     else {
       const bet = { [userBet]: { betId: userBet, fixtureId: fixtureId, bet: choice, userId: this.props.userId } };
-      console.log("new bet", bet);
       this.props.onSaveBet(bet);
     }
   }
