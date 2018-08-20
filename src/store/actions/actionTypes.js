@@ -25,4 +25,7 @@ export const SCORE_START = "SCORE_START";
 export const SCORE_SUCCESS = "SCORE_SUCCESS";
 export const SCORE_FAIL = "SCORE_FAIL";
 
+export const GET_USERS_SUCCESS = "GET_USERS_SUCCESS";
+export const GET_USERS_FAIL = "GET_USERS_FAIL";
+export const GET_USERS_START = "GET_USERS_START";
 

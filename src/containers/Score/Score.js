@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { fetchAllFixtures, fetchAllBets } from '../../store/actions/index';
+import { fetchAllFixtures, fetchAllBets, fetchUsers } from '../../store/actions/index';
 
 
 class Score extends Component {
@@ -10,14 +10,24 @@ class Score extends Component {
         if (!this.props.authenticated) {
             this.props.history.push({ pathname: "/signin", state: { from: "table" } });
         }
-        else
+        else {
             this.props.onGetBets();
+            this.props.onGetUsers();
+            this.props.onGetAllFixtures();
+        }
     }
 
     render() {
-        let view = this.props.loading ? "LOADING..." : this.props.bets.map((bet, index) => <ListItemContainer key={bet.betId}><Img src="https://firebasestorage.googleapis.com/v0/b/bettis-app.appspot.com/o/images%2Ftest4.testing4?alt=media&token=aafd75bc-7e51-4a11-8583-43718f8aef5c" /> <Content>{`: ${bet.bet} - ${bet.fixtureId}`}</Content></ListItemContainer>)
+        const bets = this.props.bets;
+        const betsView = bets ? bets.map(bet => <li key={bet.betId}>{bet.betId}</li>) : <h4>There's no bets to show</h4>;
+        const fixtures = this.props.allFixtures;
+        const users = this.props.users;
+        
         return (
-            view
+            <div>
+                { betsView }
+                {  }
+            </div>
         );
     }
 }
@@ -25,9 +35,12 @@ class Score extends Component {
 const mapStateToProps = state => {
     return {
         bets: state.betsReducer.allBets,
+        users: state.usersReducer.users,
         allFixtures: state.fixturesReducer.allFixtures,
+        fixturesLoading: state.fixturesReducer.loading,
         scores: state.standings.scores,
-        loading: state.betsReducer.loading,
+        betsLoading: state.betsReducer.loading,
+        usersLoading: state.usersReducer.loading,
         error: state.standings.error,
         authenticated: state.auth.tokenId ? true : false
     }
@@ -36,7 +49,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onGetAllFixtures: () => dispatch(fetchAllFixtures()),
-        onGetBets: () => dispatch(fetchAllBets())
+        onGetBets: () => dispatch(fetchAllBets()),
+        onGetUsers: () => dispatch(fetchUsers())
     }
 }
 
