@@ -19,14 +19,45 @@ class Score extends Component {
 
     render() {
         const bets = this.props.bets;
-        const betsView = bets ? bets.map(bet => <li key={bet.betId}>{bet.betId}</li>) : <h4>There's no bets to show</h4>;
         const fixtures = this.props.allFixtures;
         const users = this.props.users;
-        
+
+        const playersResult = users ? users.map(user => {
+            const player = {
+                name: "",
+                points: 0,
+                betted: 0,
+                lost: 0,
+                won: 0
+            };
+
+            const userBets = bets ? bets.filter(bet => bet.userId === user.userId) : [];
+            
+            for (let bet of userBets) {
+                for(let fixture of fixtures){
+                    if (bet.fixtureId === fixture.id) {
+                        if (bet.bet === fixture.winner) {
+                            player.points += 3;
+                            player.won += 1;
+                        }
+                        else {
+                            player.lost += 1
+                        }
+                    }
+                }
+            }
+
+            player.name = `${user.firstname} ${user.lastname}`;
+            player.betted = userBets.length; //how many times player betted
+            player.points += userBets.length //1 point for each bet
+
+            return player;
+
+        }) : "There's no scores to show rigth now!";
+        console.log(playersResult);
         return (
             <div>
-                { betsView }
-                {  }
+
             </div>
         );
     }
