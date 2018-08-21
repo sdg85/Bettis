@@ -58,7 +58,6 @@ class Score extends Component {
 //Calculate players result
 const calculatePlayersResult = (fixtures, bets, users) => {
     const playersResult = users ? users.map(user => {
-        console.log(user);
         const player = {
             imgUrl: user.imgUrl,
             name: "",
@@ -94,7 +93,6 @@ const calculatePlayersResult = (fixtures, bets, users) => {
 
     //Sort playersResult
     playersResult.sort((a, b) => b.points - a.points);
-    console.log(playersResult);
     return playersResult;
 }
 
@@ -124,9 +122,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(Score);
 
 const Table = styled.table`
     border: 1px solid #eee5c6;
+    width: 80%;
     margin: 0 auto;
     border-collapse: collapse;
-    padding: 10px;
     background-color: rgba(255,255,255,0.81);
     box-shadow: 0.05rem 0.05rem 1.1rem rgba(20,20,20,0.2);
 `;
