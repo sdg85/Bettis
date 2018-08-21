@@ -35,7 +35,7 @@ const signUpForm = props => {
                 placeholder="Passoword"
                 onChange={props.passwordChanged} />
             <UploadContainer>
-                <Input type="file" id="file" placeholder="profile image" onChange={props.fileUploadChanged} />
+                <Input type="file" id="file" accept="image/*" placeholder="profile image" onChange={props.fileUploadChanged} />
             </UploadContainer>
             {props.imgUrl ? <img src={props.imgUrl} width="100" height="100" alt="Profile" /> : null}
 
