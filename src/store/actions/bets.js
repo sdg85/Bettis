@@ -116,22 +116,12 @@ export const fetchAllBets = () => {
             dispatch(betsStart());
             const token = getState().auth.tokenId;
             const response = await axios.get('https://bettis-app.firebaseio.com/bets.json?auth=' + token);
-            const allBets = Object.values(response.data);
-
-            // const betsArray = [];
-
-            // for (let key in bets) {
-            //     betsArray.push({
-            //         betId: key,
-            //         bet: bets[key].bet,
-            //         fixtureId: bets[key].fixtureId,
-            //         userId: bets[key].userId
-            //     });
-            // }
+            const allBets = response ? Object.values(response.data) : [];
             dispatch(getBetsSuccess(allBets));
         }
         catch (error) {
-            dispatch(betsFail(error.response.data.message));
+            const errorMsg = error.response ? error.response.data.message : error;
+            dispatch(betsFail(errorMsg));
         }
     }
 }

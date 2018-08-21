@@ -22,45 +22,80 @@ class Score extends Component {
         const fixtures = this.props.allFixtures;
         const users = this.props.users;
 
-        const playersResult = users ? users.map(user => {
-            const player = {
-                name: "",
-                points: 0,
-                betted: 0,
-                lost: 0,
-                won: 0
-            };
+        const playersResult = calculatePlayersResult(fixtures, bets, users);
 
-            const userBets = bets ? bets.filter(bet => bet.userId === user.userId) : [];
-            
-            for (let bet of userBets) {
-                for(let fixture of fixtures){
-                    if (bet.fixtureId === fixture.id) {
-                        if (bet.bet === fixture.winner) {
-                            player.points += 3;
-                            player.won += 1;
-                        }
-                        else {
-                            player.lost += 1
-                        }
+        const tableView = playersResult.map((playerResult, index) =>
+            <Tr key={index}>
+                <Td ><Img src={playerResult.imgUrl} /></Td>
+                <Td>{playerResult.name}</Td>
+                <Td>{playerResult.betted}</Td>
+                <Td>{playerResult.won}</Td>
+                <Td>{playerResult.lost}</Td>
+                <Td>{playerResult.points}</Td>
+            </Tr>
+        );
+
+        return (
+            <Table>
+                <TableHeader>
+                    <Tr>
+                        <Td></Td>
+                        <Td>Name</Td>
+                        <Td>B</Td>
+                        <Td>W</Td>
+                        <Td>L</Td>
+                        <Td>P</Td>
+                    </Tr>
+                </TableHeader>
+                <tbody>
+                   {tableView}
+                </tbody>
+            </Table>
+        );
+    }
+}
+
+//Calculate players result
+const calculatePlayersResult = (fixtures, bets, users) => {
+    const playersResult = users ? users.map(user => {
+        console.log(user);
+        const player = {
+            imgUrl: user.imgUrl,
+            name: "",
+            points: 0,
+            betted: 0,
+            lost: 0,
+            won: 0
+        };
+
+        const userBets = bets ? bets.filter(bet => bet.userId === user.userId) : [];
+
+        for (let bet of userBets) {
+            for (let fixture of fixtures) {
+                if (bet.fixtureId === fixture.id) {
+                    if (bet.bet === fixture.winner) {
+                        player.points += 3; //3p for betting right
+                        player.won += 1;
+                    }
+                    else {
+                        player.lost += 1
                     }
                 }
             }
+        }
 
-            player.name = `${user.firstname} ${user.lastname}`;
-            player.betted = userBets.length; //how many times player betted
-            player.points += userBets.length //1 point for each bet
+        player.name = `${user.firstname} ${user.lastname}`;
+        player.betted = userBets.length; //how many times player betted
+        player.points += userBets.length //1 point for each bet
 
-            return player;
+        return player;
 
-        }) : "There's no scores to show rigth now!";
-        console.log(playersResult);
-        return (
-            <div>
+    }) : "There's no scores to show rigth now!";
 
-            </div>
-        );
-    }
+    //Sort playersResult
+    playersResult.sort((a, b) => b.points - a.points);
+    console.log(playersResult);
+    return playersResult;
 }
 
 const mapStateToProps = state => {
@@ -87,9 +122,24 @@ const mapDispatchToProps = dispatch => {
 
 export default connect(mapStateToProps, mapDispatchToProps)(Score);
 
-const Content = styled.div`
+const Table = styled.table`
+    border: 1px solid #eee5c6;
+    margin: 0 auto;
+    border-collapse: collapse;
+    padding: 10px;
+    background-color: rgba(255,255,255,0.81);
+    box-shadow: 0.05rem 0.05rem 1.1rem rgba(20,20,20,0.2);
+`;
+
+const TableHeader = styled.thead`
+    background-color: #cf0c1e;
+    color: #fff;
+`;
+
+const Td = styled.td`
     align-self: center;
     padding: 5px;
+    /* border: 1px solid #000; */
 `;
 
 const Img = styled.img`
@@ -100,15 +150,6 @@ const Img = styled.img`
     border-radius: 50%;
 `;
 
-const ListItemContainer = styled.li`
-    display: flex;
-    background-color: rgba(255,255,255,0.9);
-    color: #cf0c1e;
-    padding: 10px;
-    margin: 5px 10px;
-
-    @media(min-width: 800px){
-        width: 800px
-        margin: 5px auto;
-    }
+const Tr = styled.tr`
+    border-bottom: 1px solid #eee5c6;
 `;
