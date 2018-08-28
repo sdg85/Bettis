@@ -14,7 +14,6 @@ class Betting extends Component {
     else {
       //if authenticated then get user bets and todays fixtures
       await this.props.onFetchAllFixtures();
-      console.log("bla bla bla");
       this.props.onGetUserBets();
       this.props.onFetchTodaysFixtures();
     }

@@ -122,7 +122,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(Score);
 
 const Table = styled.table`
     border: 1px solid #eee5c6;
-    width: 80%;
+    width: 90%;
     margin: 0 auto;
     border-collapse: collapse;
     background-color: rgba(255,255,255,0.81);
