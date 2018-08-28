@@ -9,15 +9,21 @@ const signInForm = props => {
             <h2>Sign In</h2>
         </div>
             <Input
-                value={props.username}
+                id="email"
+                valid={props.email.valid}
+                value={props.email.value}
+                touched={props.email.touched}
                 type="text"
-                placeholder="Email..."
-                onChange={props.emailChanged} />
+                placeholder={props.email.placeholder}
+                onChange={props.onChanged} />
             <Input
-                value={props.password}
+                id="password"
+                valid={props.password.valid}
+                value={props.password.value}
+                touched={props.password.touched}
                 type="password"
-                placeholder="Passoword..."
-                onChange={props.passwordChanged} />
+                placeholder={props.password.placeholder}
+                onChange={props.onChanged} />
             <Button type="submit" >Sign in</Button>
             <br/>
             <NavLink to="/signup" >Not a member? Click here</NavLink>
@@ -44,7 +50,10 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
-    border: 1px solid #eee;
+    border: ${ props => {
+        return !props.valid && props.touched ? "1px solid #cf0c1e" : "1px solid #eee"
+    }
+    };
     padding: 10px;
     margin-bottom: 5px;
     &:focus{
