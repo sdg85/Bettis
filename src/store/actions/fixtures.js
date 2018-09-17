@@ -66,35 +66,43 @@ export const fetchAllFixtures = () => {
             //fetch started, show spinner
             dispatch(getAllFixturesStart());
 
-            const fromDate = moment(new Date("2018-06-14")).format("YYYY-MM-DD");
-            const toDate = moment(new Date("2018-07-15")).format("YYYY-MM-DD");
+            const fromDate = moment(new Date("2018-09-18")).format("YYYY-MM-DD");
+            const toDate = moment(new Date("2019-06-01")).format("YYYY-MM-DD");
             let allFixtures = getState().fixturesReducer.allFixtures;
             
             if (allFixtures.length === 0) {
-                const response = await axios.get("https://api.football-data.org/v2/competitions/2000/matches?dateFrom=" + fromDate + "&dateTo=" + toDate, headersConf);
+                const response = await axios.get("https://api.football-data.org/v2/competitions/2001/matches?dateFrom=" + fromDate + "&dateTo=" + toDate, headersConf);
 
                 //Get flags from state
                 let flags = getState().fixturesReducer.flags;
                 //Get flags for all teams if there not already fetched.
                 if (flags.length === 0) {
-                    const flagsData = await axios.get("https://bettis-app.firebaseio.com/flags.json");
-                    flags = flagsData.data;
+                    const response = await axios.get("https://api.football-data.org/v2/competitions/2001/teams?year=2018&stage=GROUP_STAGE", headersConf);
+                    console.log(response.data.teams);
+                    flags = response.data.teams.map(team => { 
+                        return {
+                            teamName: team.name, 
+                            flagUrl: team.crestUrl, 
+                            shortName: team.shortName
+                        } 
+                    });
                     dispatch(getFlags(flags));
                 }
-
+                console.log(response.data.matches);
+                console.log(flags);
                 allFixtures = response.data.matches.map(fixture => {
-                    const homeFlag = flags.find(flag => flag.teamName === fixture.homeTeam.name);
-                    const awayFlag = flags.find(flag => flag.teamName === fixture.awayTeam.name);
+                    const homeTeamFlag = flags.find(flag => flag.teamName === fixture.homeTeam.name);
+                    const awayTeamFlag = flags.find(flag => flag.teamName === fixture.awayTeam.name);
 
                     return {
                         id: fixture.id,
                         status: fixture.status,
                         // date: fixture.utcDate,
-                        date: moment(fixture.utcDate).add(2, 'months').format("YYYY-MM-DD HH:mm"),
+                        date: fixture.utcDate,
                         homeTeamName: fixture.homeTeam.name,
-                        homeTeamFlagUrl: homeFlag ? homeFlag.flagUrl : "",
+                        homeTeamFlagUrl: homeTeamFlag ? homeTeamFlag.flagUrl : "",
                         awayTeamName: fixture.awayTeam.name,
-                        awayTeamFlagUrl: awayFlag ? awayFlag.flagUrl : "",
+                        awayTeamFlagUrl: awayTeamFlag ? awayTeamFlag.flagUrl : "",
                         goalHomeTeam: fixture.score.fullTime.homeTeam || fixture.score.halfTime.homeTeam + fixture.score.extraTime.homeTeam || 0,
                         goalAwayTeam: fixture.score.fullTime.awayTeam || fixture.score.halfTime.awayTeam + fixture.score.extraTime.awayTeam || 0,
                         penaltiesHomeTeam: fixture.score.penalties.homeTeam,
@@ -120,7 +128,7 @@ export const fetchTodaysFixtures = () => {
             const today = moment(new Date());
             const fromDate = today.format("YYYY-MM-DD");
             let toDate = today.add(2, 'days').format("YYYY-MM-DD");
-            const finalDay = moment(new Date("2018-09-16")).format("YYYY-MM-DD");
+            const finalDay = moment(new Date("2019-06-01")).format("YYYY-MM-DD");
             let todaysFixtures = [];
             let counter = 0;
 
