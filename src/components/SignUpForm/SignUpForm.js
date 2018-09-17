@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { withRouter, NavLink } from 'react-router-dom';
 
 const signUpForm = props => {
+    const fields = props.fields;
+
     return (
         <Form onSubmit={props.submit} name="signup">
             <div>
@@ -11,37 +13,58 @@ const signUpForm = props => {
             <Input
                 type="text"
                 id="firstName"
-                value={props.firstName}
-                onChange={props.firstNameChanged}
-                placeholder="first name"
-            />
+                value={fields.firstName.value}
+                valid={fields.firstName.valid}
+                touched={fields.firstName.touched}
+                onChange={props.onChanged}
+                placeholder="first name" />
+            
             <Input
                 type="text"
                 id="lastName"
-                value={props.lastName}
-                onChange={props.lastNameChanged}
+                value={fields.lastName.value}
+                onChange={props.onChanged}
                 placeholder="last name"
-            />
+                valid={fields.lastName.valid}
+                touched={fields.lastName.touched} />
+            
             <Input
-                value={props.email}
+                value={fields.email.value}
                 id="email"
                 type="email"
                 placeholder="Email"
-                onChange={props.emailChanged} />
+                valid={fields.email.valid}
+                touched={fields.email.touched}
+                onChange={props.onChanged} />
+            
             <Input
-                value={props.password}
+                value={fields.password.value}
                 id="password"
                 type="password"
                 placeholder="Passoword"
-                onChange={props.passwordChanged} />
+                valid={fields.password.valid}
+                touched={fields.password.touched}
+                onChange={props.onChanged} />
+            
             <UploadContainer>
-                <Input type="file" id="file" placeholder="profile image" onChange={props.fileUploadChanged} />
+                <label>Profile picture</label>
+                <Input
+                    type="file"
+                    id="file"
+                    accept="image/*"
+                    valid={fields.imgUrl.valid}
+                    placeholder="profile image"
+                    onChange={props.onChanged} />
             </UploadContainer>
-            {props.imgUrl ? <img src={props.imgUrl} width="100" height="100" alt="Profile" /> : null}
-
+            
+            {fields.imgUrl.value ? <img src={fields.imgUrl.value} width="100" height="100" alt="Profile" /> : null}
+            
             <Button type="submit" >Sign Up</Button>
+            
             <br />
+            
             <NavLink to="/signin" >Already a member? Click here</NavLink>
+        
         </Form>
     );
 }
@@ -65,7 +88,10 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
-    border: 1px solid #eee;
+    border: ${ props => {
+        return !props.valid && props.touched ? "1px solid #cf0c1e" : "1px solid #eee"
+    }
+    };
     padding: 10px;
     margin-bottom: 5px;
     transition-duration: 0.8s;
@@ -96,4 +122,5 @@ const Button = styled.button`
 
 const UploadContainer = styled.div`
     display: flex;
+    flex-direction: column;
 `;

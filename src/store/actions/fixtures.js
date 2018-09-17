@@ -107,7 +107,7 @@ export const fetchAllFixtures = () => {
                         goalAwayTeam: fixture.score.fullTime.awayTeam || fixture.score.halfTime.awayTeam + fixture.score.extraTime.awayTeam || 0,
                         penaltiesHomeTeam: fixture.score.penalties.homeTeam,
                         penaltiesAwayTeam: fixture.score.penalties.awayTeam,
-                        winner: fixture.winner
+                        winner: fixture.score.winner
                     }
                 });
             }

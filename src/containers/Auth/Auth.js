@@ -9,120 +9,146 @@ import firebase from '../../firebase';
 
 class Auth extends Component {
     state = {
-        firstName: "",
-        lastName: "",
-        email: "",
-        imgUrl: null,
-        password: ""
+        form: {
+            firstName: {
+                value: "",
+                valid: false,
+                touched: false,
+                placeholder: "first name"
+            },
+            lastName: {
+                value: "",
+                valid: false,
+                touched: false,
+                placeholder: "last name"
+            },
+            email: {
+                value: "",
+                valid: false,
+                touched: false,
+                placeholder: "email"
+            },
+            password: {
+                value: "",
+                valid: false,
+                touched: false,
+                placeholder: "password"
+            },
+            imgUrl: {
+                value: "",
+                valid: false,
+                placeholder: "image"
+            }
+        }
     }
 
     onChangedHandler = (e) => {
-        switch (e.target.id) {
-            case "firstName":
-                this.setState({ firstName: e.target.value });
-                break;
-            case "lastName":
-                this.setState({ lastName: e.target.value });
-                break;
-            case "password":
-                this.setState({ password: e.target.value });
-                break;
-            case "email":
-                this.setState({ email: e.target.value });
-                break;
-            case "file":
-                this.uploadFile(e.target.files[0]);
-                break;
-                default: break;
-        }
+        if (e.target.id === "file")
+            this.uploadFile(e.target.files[0]);
+
+        this.setState({
+            ...this.state,
+            form: {
+                ...this.state.form,
+                [e.target.id]: { ...this.state.form[e.target.id], value: e.target.value, touched: true, valid: e.target.value }
+            }
+        });
     }
+
     //Submit the form
     onSubmitHandler = (e) => {
         e.preventDefault();
         const signUp = e.target.name === "signup" ? true : false;
-        this.props.onAuth(this.state.firstName, this.state.lastName, this.state.email, this.state.password, this.state.imgUrl, signUp);
-    }
 
-    //Store characters from email input to the state
-    uploadFile = file => {
-        if (file) {
-            //create storage ref
-            var storageRef = firebase.storage().ref(`/images/${this.state.firstName}.${this.state.lastName}`);
+        //if signup form then validate all inputs
+        if (signUp) {
+            
+            for (let key in this.state.form) {
+                const element = this.state.form[key];
 
-            //upload file
-            var task = storageRef.put(file);
-
-            //task progress
-            task.on('state_changed',
-                //upload progress    
-                snapshot => console.log((Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(0) + " %")),
-                //upload error
-                error => console.log(error),
-                //upload complete
-                () => {
-                    storageRef.getDownloadURL().then(url => this.setState({ imgUrl: url }));
-                });
+                if (!element.valid) {
+                    alert(`The form is not valid, ${element.placeholder} is required.`);
+                    return;
+                }
+            }
         }
+        //if signin validate only email & password
+        else {
+            const email = this.state.form["email"];
+            const password = this.state.form["password"];
+
+            if(!email.valid){
+                alert(`Email is required.`);
+                return;
+            }
+            if(!password.valid){
+                alert(`Password is required.`);
+                return;
+            }
+        }
+
+        this.props.onAuth(this.state.form.firstName.value,
+            this.state.form.lastName.value,
+            this.state.form.email.value,
+            this.state.form.password.value,
+            this.state.form.imgUrl.value, signUp);
+}
+
+//Store characters from email input to the state
+uploadFile = file => {
+    if (file) {
+        //create storage ref
+        var storageRef = firebase.storage().ref(`/images/${this.state.form.firstName.value}.${this.state.form.lastName.value}`);
+
+        //upload file
+        var task = storageRef.put(file);
+
+        //task progress
+        task.on('state_changed',
+            //upload progress    
+            snapshot => console.log((Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(0) + " %")),
+            //upload error
+            error => console.log(error),
+            //upload complete. Set the url of the uploaded image to the state.
+            () => {
+                storageRef.getDownloadURL().then(url => this.setState({
+                    ...this.state,
+                    form: {
+                        ...this.state.form,
+                        imgUrl: { ...this.state.form.imgUrl, value: url, touched: true, valid: true }
+                    }
+                }));
+            });
     }
+}
 
-    //Store first name to state
-    onFirstNameChangedHandler = () => {
+render() {
+    // console.log(this.props.location);
+    let authView = this.props.match.url === "/signup" ?
+        <SignUpForm
+            fields={this.state.form}
+            onChanged={this.onChangedHandler}
+            submit={this.onSubmitHandler} /> :
+        <SignInForm
+            submit={this.onSubmitHandler}
+            email={this.state.form.email}
+            password={this.state.form.password}
+            onChanged={this.onChangedHandler} />
 
-    }
-
-    //Store last name to state
-    onLastNameChangedHandler = () => {
-
-    }
-    //Store characters from email input to the state
-    onEmailChangeHandler = (e) => {
-        this.setState({
-            email: e.target.value
-        });
-    }
-    //Store characters from password input to the state
-    onPasswordChangeHandler = (e) => {
-        this.setState({
-            password: e.target.value
-        });
-    }
-
-    render() {
-        // console.log(this.props.location);
-        let authView = this.props.match.url === "/signup" ?
-            <SignUpForm
-                submit={this.onSubmitHandler}
-                firstName={this.state.firstName}
-                lastName={this.state.lastName}
-                email={this.state.email}
-                password={this.state.password}
-                firstNameChanged={this.onChangedHandler}
-                lastNameChanged={this.onChangedHandler}
-                emailChanged={this.onChangedHandler}
-                passwordChanged={this.onChangedHandler}
-                fileUploadChanged={this.onChangedHandler}
-                imgUrl={this.state.imgUrl} /> :
-            <SignInForm
-                submit={this.onSubmitHandler}
-                email={this.state.email}
-                password={this.state.password}
-                emailChanged={this.onEmailChangeHandler}
-                passwordChanged={this.onPasswordChangeHandler} />
-
-        let view = this.props.loading ? <h4>loading...</h4> : this.props.tokenId ? <Redirect to={{
-            pathname: this.props.location.state ? this.props.location.state.from : "/table"
-        }} /> : authView;
+    let view = this.props.loading ? <h4>loading...</h4> : this.props.tokenId ? <Redirect to={{
+        pathname: this.props.location.state ? this.props.location.state.from : "/table"
+    }} /> : authView;
 
 
-        let error = this.props.error ? <Error>{this.props.error}</Error> : null;
+    let error = this.props.error ? <Error>{this.props.error}</Error> : null;
 
-        return (
-            <div>
-                {error}
-                {view}
-            </div>
-        );
-    }
+    return (
+        <div>
+            {error}
+            {view}
+        </div>
+    );
+}
 }
 
 const mapStateToProps = state => {
