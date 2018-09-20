@@ -75,7 +75,7 @@ export const fetchAllFixtures = () => {
 
                 //Get flags from state
                 let flags = getState().fixturesReducer.flags;
-                //Get flags for all teams if there not already fetched.
+                //Fetch flags if there aren't any in the state.
                 if (flags.length === 0) {
                     const response = await axios.get("https://api.football-data.org/v2/competitions/2001/teams?year=2018&stage=GROUP_STAGE", headersConf);
                     flags = response.data.teams.map(team => { 
