@@ -78,7 +78,6 @@ export const fetchAllFixtures = () => {
                 //Get flags for all teams if there not already fetched.
                 if (flags.length === 0) {
                     const response = await axios.get("https://api.football-data.org/v2/competitions/2001/teams?year=2018&stage=GROUP_STAGE", headersConf);
-                    console.log(response.data.teams);
                     flags = response.data.teams.map(team => { 
                         return {
                             teamName: team.name, 
@@ -88,12 +87,10 @@ export const fetchAllFixtures = () => {
                     });
                     dispatch(getFlags(flags));
                 }
-                console.log(response.data.matches);
-                console.log(flags);
                 allFixtures = response.data.matches.map(fixture => {
                     const homeTeamFlag = flags.find(flag => flag.teamName === fixture.homeTeam.name);
                     const awayTeamFlag = flags.find(flag => flag.teamName === fixture.awayTeam.name);
-
+                    console.log(fixture.status, fixture);
                     return {
                         id: fixture.id,
                         status: fixture.status,

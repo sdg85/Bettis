@@ -38,7 +38,8 @@ const fixture = props => {
                 </Team>
             </TeamsContainer>
             {
-                props.loading ? <BetSpinner /> : <BetContainer>
+                props.loading ? <BetSpinner /> : 
+                <BetContainer>
                     <Bet
                         id="HOME_TEAM"
                         date={matchDateTime}
@@ -98,14 +99,13 @@ const Team = styled.div`
 `;
 
 const Flag = styled.img`
-        border-radius: 50%; 
-        height: 90px;
-        width: 90px;
-        border: 1px solid #ccc;
+        height: 100px;
+        width: 100px;
 `;
 
 const TeamNameContainer = styled.div`
-    text-align: center
+    text-align: center;
+    max-width: 100px;
 `;
 
 const VsContainer = styled.div`
