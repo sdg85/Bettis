@@ -2,13 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 import { withRouter, NavLink } from 'react-router-dom';
 
+import AuthButton from '../UI/Buttons/AuthButton';
+import AuthLink from '../UI/Links/AuthLink';
+import AuthHeaderText from '../UI/HeaderTexts/AuthHeaderText';
+
+
 const signUpForm = props => {
     const fields = props.fields;
 
     return (
         <Form onSubmit={props.submit} name="signup">
             <div>
-                <h2>Sign Up</h2>
+                <AuthHeaderText>Sign Up</AuthHeaderText>
             </div>
             <Input
                 type="text"
@@ -59,12 +64,11 @@ const signUpForm = props => {
             
             {fields.imgUrl.value ? <img src={fields.imgUrl.value} width="100" height="100" alt="Profile" /> : null}
             
-            <Button type="submit" >Sign Up</Button>
-            
-            <br />
-            
-            <NavLink to="/signin" >Already a member? Click here</NavLink>
-        
+            <AuthButton type="submit" >Sign Up</AuthButton>
+            <div style={{ textAlign:"center" }}>
+                <p>or</p>
+                <AuthLink navTo="/signin" >Sign in</AuthLink>
+            </div>
         </Form>
     );
 }
@@ -97,26 +101,6 @@ const Input = styled.input`
     transition-duration: 0.8s;
     &:focus{
         outline-color: #2d7fb5;
-    }
-`;
-
-const Button = styled.button`
-    border: 2px solid #cf0c1e;
-    color: #cf0c1e;
-    padding: 10px;
-    background: transparent;
-    border-radius: 6px;
-    text-transform: uppercase;
-    font-size: 16px;
-    cursor: pointer;
-    display: inline-block;
-    transition-duration: 0.4s;
-    font-weight: 600;
-
-    &:hover{
-        background-color: #cf0c1e;
-        color: #fff;
-        border: 2px solid #eee5c6;
     }
 `;
 

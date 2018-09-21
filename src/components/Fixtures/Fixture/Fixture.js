@@ -100,8 +100,9 @@ const Team = styled.div`
 `;
 
 const Flag = styled.img`
-        height: 100px;
-        width: 100px;
+        height: 80px;
+        width: 80px;
+        align-self: center;
 `;
 
 const TeamNameContainer = styled.div`

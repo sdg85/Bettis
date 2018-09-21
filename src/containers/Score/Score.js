@@ -130,7 +130,7 @@ const Table = styled.table`
 `;
 
 const TableHeader = styled.thead`
-    background-color: #cf0c1e;
+    background-color: #365079;
     color: #fff;
 `;
 

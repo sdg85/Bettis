@@ -5,13 +5,29 @@ import Betting from './containers/Betting/Betting';
 import Toolbar from './components/Navigation/Toolbar/Toolbar';
 import Score from './containers/Score/Score';
 import Auth from './containers/Auth/Auth';
+import SideNav from './components/UI/SideNav/SideNave';
 
 class App extends Component {
+state = {
+  open: false
+}
+
+sideNavToggleHandler = () => {
+  this.setState((prevState) => {
+    return { open: !prevState.open }
+  });
+}
+closeSideNavHandler = () => {
+  this.setState({
+    open: false
+  })
+}
 
   render() {
     return (
       <Container>
-        <Toolbar />
+        <Toolbar openSideNav={ this.sideNavToggleHandler } />
+        <SideNav isOpen={ this.state.open } closeSideNav={this.closeSideNavHandler} />
         <Switch>
           <Route path="/table" component={Score} />
           <Route path="/auth" component={Auth} />

@@ -6,7 +6,7 @@ import logo from '../../../assets/wc_2018_logo.jpg';
 const toolbar = props => {
     return (
         <ToolbarContainer>
-            <div>
+            <div onClick={props.openSideNav}>
                 <Bar />
                 <Bar />
                 <Bar />
@@ -28,8 +28,8 @@ const ImgContainer = styled.div`
 `;
 
 const Bar = styled.div`
-    width: 35px;
-    height: 5px;
+    width: 30px;
+    height: 3px;
     background-color: #fff;
     margin: 6px 0;
     box-shadow: 0.05rem 0.05rem 0.3rem rgb(255, 255, 255);
@@ -69,7 +69,7 @@ const ToolbarContainer = styled.div`
     align-items: center;
     /* overflow: hidden; */
     top: 0;
-    z-index: 999999999;
+    z-index: 1000;
     display: flex;
     width: 100%;
     background-color: #011f43a1;
@@ -80,4 +80,5 @@ const ToolbarContainer = styled.div`
 const HeaderText = styled.h1`
     color: #fff;
     margin: auto;
+    text-shadow: 0.04em 0.04em 0.9em #eee;
 `;
