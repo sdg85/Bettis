@@ -1,5 +1,4 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import AuthLink from '../UI/Links/AuthLink';
@@ -31,7 +30,7 @@ const signInForm = props => {
             <AuthButton type="submit" >Sign in</AuthButton>
             <div style={{ textAlign:"center" }}>
                 <p>or</p>
-                <AuthLink navTo="/signup" >Register</AuthLink>
+                <AuthLink navTo="/signup" >Sign up</AuthLink>
             </div>
             
         </Form>

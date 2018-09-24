@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { NavLink } from 'react-router-dom';
-import logo from '../../../assets/wc_2018_logo.jpg';
+// import { NavLink } from 'react-router-dom';
 
 const toolbar = props => {
     return (
@@ -22,10 +21,10 @@ const toolbar = props => {
 
 export default toolbar;
 
-const ImgContainer = styled.div`
-    margin: 10px;
-    box-shadow: 2px 2px 10px rgba(20,20,20,0.27);
-`;
+// const ImgContainer = styled.div`
+//     margin: 10px;
+//     box-shadow: 2px 2px 10px rgba(20,20,20,0.27);
+// `;
 
 const Bar = styled.div`
     width: 30px;
@@ -35,30 +34,30 @@ const Bar = styled.div`
     box-shadow: 0.05rem 0.05rem 0.3rem rgb(255, 255, 255);
 `;
 
-const Nav = styled(NavLink) `
-    padding: 20px;
-    box-sizing: border-box;
-    background-color: #cf0c1e;
-    text-decoration-style: none;
-    text-decoration: none;
-    margin: 10px;
-    color: #fff;
-    max-height: 60px;
-    max-width: 90px;
-    text-align: center;
-    border: 2px solid #eee5c6;
-    font-weight: 600;
-    box-shadow: 0.05rem 0.05rem 1.1rem rgba(20,20,20,0.27);
-    &:hover{
-        background-color: #eee5c6;
-    }
-    &:selected {
-        background-color: #eee5c6;
-    }
-    /* &:focus {
-        background-color: #eee5c6;
-    } */
-`;
+// const Nav = styled(NavLink) `
+//     padding: 20px;
+//     box-sizing: border-box;
+//     background-color: #cf0c1e;
+//     text-decoration-style: none;
+//     text-decoration: none;
+//     margin: 10px;
+//     color: #fff;
+//     max-height: 60px;
+//     max-width: 90px;
+//     text-align: center;
+//     border: 2px solid #eee5c6;
+//     font-weight: 600;
+//     box-shadow: 0.05rem 0.05rem 1.1rem rgba(20,20,20,0.27);
+//     &:hover{
+//         background-color: #eee5c6;
+//     }
+//     &:selected {
+//         background-color: #eee5c6;
+//     }
+//     /* &:focus {
+//         background-color: #eee5c6;
+//     } */
+// `;
 
 const ToolbarContainer = styled.div`
     /* margin: 0 10px 10px 10px; */
