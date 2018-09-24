@@ -38,7 +38,8 @@ const fixture = props => {
                 </Team>
             </TeamsContainer>
             {
-                props.loading ? <BetSpinner /> : <BetContainer>
+                props.loading ? <BetSpinner /> : 
+                <BetContainer>
                     <Bet
                         id="HOME_TEAM"
                         date={matchDateTime}
@@ -70,7 +71,7 @@ const dateTime = () => moment(new Date()).format("YYYY-MM-DD HH:mm");
 const FixtureContainer = styled.div`
     display: flex;
     flex-direction: column;
-    background-color: ${ props => props.date > dateTime() ? "#ffffff" : "#14141445"};
+    background-color: ${ props => props.date > dateTime() ? "#04142dba" : "#d8d8d845"};
     padding: 20px;
     margin: 20px;
     opacity: 0.9;
@@ -79,11 +80,12 @@ const FixtureContainer = styled.div`
 `;
 
 const Header = styled.div`
-    background-color: ${ props => props.date > dateTime() ? "#cf0c1e" : "#14141445"};
+    background-color: ${ props => props.date > dateTime() ? "#7b121c" : "#d8d8d845"};
     padding: 10px;
     color: #fff;
     text-align: center;
     font-weight: 700;
+    box-shadow: 0px 0px 10px rgba(255,255,255,0.60);
 `;
 
 const TeamsContainer = styled.div`
@@ -98,14 +100,15 @@ const Team = styled.div`
 `;
 
 const Flag = styled.img`
-        border-radius: 50%; 
-        height: 90px;
-        width: 90px;
-        border: 1px solid #ccc;
+        height: 80px;
+        width: 80px;
+        align-self: center;
 `;
 
 const TeamNameContainer = styled.div`
-    text-align: center
+    text-align: center;
+    max-width: 100px;
+    color: #fff;
 `;
 
 const VsContainer = styled.div`
@@ -113,6 +116,7 @@ const VsContainer = styled.div`
     display: flex; 
     flex-direction: column;
     align-items: center;
+    color: #fff;
 `;
 
 const Vs = styled.div`
@@ -120,9 +124,10 @@ const Vs = styled.div`
     max-width: 20px;
     text-align: center; 
     color: #fff; 
-    background-color: ${ props => props.date > dateTime() ? "#cf0c1e" : "#14141445"}; 
+    background-color: ${ props => props.date > dateTime() ? "#7b121c" : "#d8d8d845"}; 
     border-radius: 100%; 
     padding: 10px
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.60);
 `;
 
 const BetContainer = styled.div`
@@ -130,6 +135,7 @@ const BetContainer = styled.div`
     justify-content: space-around; 
     border: 1px solid #ccc; 
     margin-top: 10px;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.60);
 `;
 
 const Bet = styled.div`
@@ -137,17 +143,11 @@ const Bet = styled.div`
     flex: 1;
     text-align: center;
     padding: 3px;
-    color: ${ props => {
-        if (props.bet) {
-            if (props.bet.bet === props.id)
-                return "#fff";
-        }
-        return "#000";
-    }};
+    color: #fff;
     background-color: ${ props => {
         if (props.bet) {
             if (props.bet.bet === props.id)
-                return props.date > dateTime() ? "#cf0c1e" : "#14141445";
+                return props.date > dateTime() ? "#7b121c" : "#d8d8d845";
         }
         return "";
     }};

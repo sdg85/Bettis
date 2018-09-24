@@ -2,8 +2,8 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Oxygen', sans-serif;
-  background-image: url("./assets/bg-wc2018-russia.jpg");
+  background-image: url("./assets/background.jpg");
   /* background-repeat: repeat-y; */
   background-attachment: fixed;
-  /* background-position: center; */
+  background-position: center;
 }
