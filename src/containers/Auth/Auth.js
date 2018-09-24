@@ -6,6 +6,7 @@ import SignInForm from '../../components/SignInForm/SignInForm';
 import { auth } from '../../store/actions/index';
 import styled from 'styled-components';
 import firebase from '../../firebase';
+import Spinner from '../../components/UI/Spinners/Spinner/Spinner';
 
 class Auth extends Component {
     state = {
@@ -135,7 +136,7 @@ render() {
             password={this.state.form.password}
             onChanged={this.onChangedHandler} />
 
-    let view = this.props.loading ? <h4>loading...</h4> : this.props.tokenId ? <Redirect to={{
+    let view = this.props.loading ? <Spinner /> : this.props.tokenId ? <Redirect to={{
         pathname: this.props.location.state ? this.props.location.state.from : "/table"
     }} /> : authView;
 
