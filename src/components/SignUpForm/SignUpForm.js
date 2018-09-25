@@ -5,11 +5,12 @@ import { withRouter, NavLink } from 'react-router-dom';
 import AuthButton from '../UI/Buttons/AuthButton';
 import AuthLink from '../UI/Links/AuthLink';
 import AuthHeaderText from '../UI/HeaderTexts/AuthHeaderText';
+import Spinner from '../UI/Spinners/Spinner/Spinner';
 
 
 const signUpForm = props => {
     const fields = props.fields;
-
+console.log(props.loading);
     return (
         <Form onSubmit={props.submit} name="signup">
             <div>
@@ -62,7 +63,7 @@ const signUpForm = props => {
                     onChange={props.onChanged} />
             </UploadContainer>
             
-            {fields.imgUrl.value ? <img src={fields.imgUrl.value} width="100" height="100" alt="Profile" /> : null}
+            {fields.imgUrl.value && !props.loading ? <img src={fields.imgUrl.value} width="100" height="100" alt="Profile" /> : props.loading ? <Spinner /> : null}
             
             <AuthButton type="submit" >Sign Up</AuthButton>
             <div style={{ textAlign:"center" }}>
