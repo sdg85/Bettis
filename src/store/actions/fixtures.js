@@ -90,7 +90,7 @@ export const fetchAllFixtures = () => {
                 allFixtures = response.data.matches.map(fixture => {
                     const homeTeamFlag = flags.find(flag => flag.teamName === fixture.homeTeam.name);
                     const awayTeamFlag = flags.find(flag => flag.teamName === fixture.awayTeam.name);
-                    console.log(fixture.status, fixture);
+                    
                     return {
                         id: fixture.id,
                         status: fixture.status,
