@@ -6,6 +6,7 @@ import SignInForm from '../../components/SignInForm/SignInForm';
 import { auth } from '../../store/actions/index';
 import styled from 'styled-components';
 import firebase from '../../firebase';
+import Spinner from '../../components/UI/Spinners/Spinner/Spinner';
 
 class Auth extends Component {
     state = {

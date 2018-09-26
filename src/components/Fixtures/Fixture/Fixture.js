@@ -107,8 +107,12 @@ const Flag = styled.img`
 
 const TeamNameContainer = styled.div`
     text-align: center;
-    max-width: 100px;
+    width: 100px;
     color: #fff;
+
+    @media (min-width: 740px){
+        width: 250px;
+    }
 `;
 
 const VsContainer = styled.div`

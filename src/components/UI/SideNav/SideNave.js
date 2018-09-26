@@ -21,7 +21,7 @@ const SideNav = styled.div`
     z-index: 1001; /* Stay on top */
     top: 0; /* Stay at the top */
     left: 0;
-    background-color: #011f43; /* Black*/
+    background-color: #011f43; 
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */

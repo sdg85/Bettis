@@ -11,10 +11,6 @@ const toolbar = props => {
                 <Bar />
             </div>
            <HeaderText>BETTIS</HeaderText>
-            {/* <div style={{ justifyItems: "center", margin: "auto" }}>
-                <Nav to="/" >BET</Nav>
-                <Nav to="/table" >TABLE</Nav>
-            </div> */}
         </ToolbarContainer>
     );
 }

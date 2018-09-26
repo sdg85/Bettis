@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { fetchTodaysFixtures, saveNewUserBet, fetchUserBets, saveChangedUserBet, deleteUserBet, fetchAllFixtures } from '../../store/actions/index';
 import Fixture from '../../components/Fixtures/Fixture/Fixture';
 import styled from 'styled-components';
+import Spinner from '../../components/UI/Spinners/Spinner/Spinner';
 
 class Betting extends Component {
 
@@ -47,11 +48,11 @@ class Betting extends Component {
     let errorMessage = this.props.error ? <MessageContainer><h4>{`${this.props.error}`}</h4></MessageContainer> : null;
 
     if (this.props.loading) {
-      view = <MessageContainer><h4>Loading....</h4></MessageContainer>
+      view = <Spinner />
     }
 
     const bets = this.props.userBets;
-    view = this.props.loading ? "Loading..." : this.props.todaysFixtures.length > 0 ? this.props.todaysFixtures.map(fixture => 
+    view = this.props.loading ? <Spinner /> : this.props.todaysFixtures.length > 0 ? this.props.todaysFixtures.map(fixture => 
       {
       const bet = bets.length > 0 ? bets.find(bet => bet.fixtureId === fixture.id) : null;
       
