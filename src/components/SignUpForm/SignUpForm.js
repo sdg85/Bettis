@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { withRouter, NavLink } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 import AuthButton from '../UI/Buttons/AuthButton';
 import AuthLink from '../UI/Links/AuthLink';
@@ -51,7 +51,7 @@ console.log(props.loading);
                 valid={fields.password.valid}
                 touched={fields.password.touched}
                 onChange={props.onChanged} />
-            
+            <br />
             <UploadContainer>
                 <label>Profile picture</label>
                 <Input
@@ -65,7 +65,7 @@ console.log(props.loading);
             
             {fields.imgUrl.value && !props.loading ? <img src={fields.imgUrl.value} width="100" height="100" alt="Profile" /> : props.loading ? <Spinner /> : null}
             
-            <AuthButton type="submit" >Sign Up</AuthButton>
+            <AuthButton type="submit" disabled={props.disabled}>Sign Up</AuthButton>
             <div style={{ textAlign:"center" }}>
                 <p>or</p>
                 <AuthLink navTo="/signin" >Sign in</AuthLink>

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const authButton = props => {
-    return <Button>{props.children}</Button>
+    return <Button disabled={props.disabled} >{props.children}</Button>
 }
 
 export default authButton;
@@ -11,7 +11,7 @@ const Button = styled.button`
     border: 1px solid #eee;
     color: #fff;
     padding: 10px;
-    background: #0c3d68;
+    background: ${ props => props.disabled ? "#ccc" : "#0c3d68" };
     border-radius: 6px;
     text-transform: uppercase;
     font-size: 16px;
@@ -21,8 +21,8 @@ const Button = styled.button`
     font-weight: 600;
 
     &:hover{
-        background-color: #2d7fb5;
+        background-color: ${ props => props.disabled ? "#ccc" : "#2d7fb5" };
         color: #fff;
-        border: 2px solid #eee5c6;
+        border: ${ props => props.disabled ? "" : "2px solid #eee5c6" };
     }
 `;

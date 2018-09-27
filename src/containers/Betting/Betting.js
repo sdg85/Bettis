@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchTodaysFixtures, saveNewUserBet, fetchUserBets, saveChangedUserBet, deleteUserBet, fetchAllBets, fetchAllFixtures } from '../../store/actions/index';
+import { fetchTodaysFixtures, saveNewUserBet, fetchUserBets, saveChangedUserBet, deleteUserBet, fetchAllFixtures } from '../../store/actions/index';
 import Fixture from '../../components/Fixtures/Fixture/Fixture';
 import styled from 'styled-components';
 import Spinner from '../../components/UI/Spinners/Spinner/Spinner';
