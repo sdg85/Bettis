@@ -39,12 +39,15 @@ class Auth extends Component {
                 value: "",
                 valid: false,
                 placeholder: "image"
-            }
+            },
+            formValid: false
         },
         loading: false,
     }
 
+
     onChangedHandler = (e) => {
+        //if it is a file input then upload selected file
         if (e.target.id === "file")
             this.uploadFile(e.target.files[0]);
         else {
@@ -56,6 +59,26 @@ class Auth extends Component {
                 }
             });
         }
+        let valid = false;
+        //loop through form elements and check validation status
+        for (let key in this.state.form) {
+            if (key === "valid")
+                continue;
+
+            if (!this.state.form[key].valid) {
+                valid = false;
+                break;
+            }
+        }
+
+        this.setState({
+            ...this.state,
+            form: {
+                ...this.state.form,
+                valid: valid,
+                [e.target.id]: { ...this.state.form[e.target.id], value: e.target.value, touched: true, valid: e.target.value }
+            }
+        });
     }
 
     //Submit the form
@@ -142,6 +165,7 @@ class Auth extends Component {
             <SignUpForm
                 fields={this.state.form}
                 loading={this.state.loading}
+                formValid={this.state.form.valid}
                 onChanged={this.onChangedHandler}
                 submit={this.onSubmitHandler} /> :
             <SignInForm
