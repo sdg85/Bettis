@@ -10,7 +10,6 @@ import Spinner from '../UI/Spinners/Spinner/Spinner';
 
 const signUpForm = props => {
     const fields = props.fields;
-console.log(props.loading);
     return (
         <Form onSubmit={props.submit} name="signup">
             <div>
@@ -24,7 +23,7 @@ console.log(props.loading);
                 touched={fields.firstName.touched}
                 onChange={props.onChanged}
                 placeholder="first name" />
-            
+
             <Input
                 type="text"
                 id="lastName"
@@ -33,7 +32,7 @@ console.log(props.loading);
                 placeholder="last name"
                 valid={fields.lastName.valid}
                 touched={fields.lastName.touched} />
-            
+
             <Input
                 value={fields.email.value}
                 id="email"
@@ -42,7 +41,7 @@ console.log(props.loading);
                 valid={fields.email.valid}
                 touched={fields.email.touched}
                 onChange={props.onChanged} />
-            
+
             <Input
                 value={fields.password.value}
                 id="password"
@@ -62,11 +61,11 @@ console.log(props.loading);
                     placeholder="profile image"
                     onChange={props.onChanged} />
             </UploadContainer>
-            
-            {fields.imgUrl.value && !props.loading ? <img src={fields.imgUrl.value} width="100" height="100" alt="Profile" /> : props.loading ? <Spinner /> : null}
-            
+            <div style={{textAlign: "center", padding:10}}>
+                {fields.imgUrl.value && !props.loading ? <img src={fields.imgUrl.value} width="100" height="100" alt="Profile" /> : props.loading ? <Spinner /> : null}
+            </div>
             <AuthButton type="submit" disabled={props.disabled}>Sign Up</AuthButton>
-            <div style={{ textAlign:"center" }}>
+            <div style={{ textAlign: "center" }}>
                 <p>or</p>
                 <AuthLink navTo="/signin" >Sign in</AuthLink>
             </div>
