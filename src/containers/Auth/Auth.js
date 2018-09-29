@@ -55,30 +55,25 @@ class Auth extends Component {
                 ...this.state,
                 form: {
                     ...this.state.form,
-                    [e.target.id]: { ...this.state.form[e.target.id], value: e.target.value, touched: true, valid: e.target.value }
+                    [e.target.id]: { ...this.state.form[e.target.id], value: e.target.value, touched: true, valid: e.target.value !== "" }
                 }
-            });
+            }, () => this.validate());
         }
-        let valid = false;
-        //loop through form elements and check validation status
+    }
+
+    //validate form
+    validate = () => {
+        let valid = true;
         for (let key in this.state.form) {
-            if (key === "valid")
+            if (key === "formValid")
                 continue;
 
-            if (!this.state.form[key].valid) {
-                valid = false;
-                break;
-            }
-        }
+            let element = this.state.form[key];
 
-        this.setState({
-            ...this.state,
-            form: {
-                ...this.state.form,
-                valid: valid,
-                [e.target.id]: { ...this.state.form[e.target.id], value: e.target.value, touched: true, valid: e.target.value }
-            }
-        });
+            if (!element.valid)
+                valid = false;
+        }
+        this.setState({ ...this.state, form: { ...this.state.form, formValid: valid } }, () => console.log(this.state.form.formValid));
     }
 
     //Submit the form
@@ -90,6 +85,9 @@ class Auth extends Component {
         if (signUp) {
 
             for (let key in this.state.form) {
+                if(key === "formValid")
+                    continue;
+
                 const element = this.state.form[key];
 
                 if (!element.valid) {
@@ -98,7 +96,7 @@ class Auth extends Component {
                 }
             }
         }
-        //if signin validate only email & password
+        //if signin, validate only email & password
         else {
             const email = this.state.form["email"];
             const password = this.state.form["password"];
@@ -125,13 +123,7 @@ class Auth extends Component {
         if (!file)
             return;
 
-        this.setState({
-            ...this.state,
-            loading: true,
-            form: {
-                ...this.state.form
-            }
-        })
+        this.setState({ loading: true });
 
         //create storage ref
         var storageRef = firebase.storage().ref(`/images/${this.state.form.firstName.value}.${this.state.form.lastName.value}`);
@@ -154,9 +146,8 @@ class Auth extends Component {
                         ...this.state.form,
                         imgUrl: { ...this.state.form.imgUrl, value: url, touched: true, valid: true }
                     }
-                }));
+                }, () => this.validate()));
             });
-
     }
 
     render() {
@@ -165,7 +156,7 @@ class Auth extends Component {
             <SignUpForm
                 fields={this.state.form}
                 loading={this.state.loading}
-                formValid={this.state.form.valid}
+                formValid={this.state.form.formValid}
                 onChanged={this.onChangedHandler}
                 submit={this.onSubmitHandler} /> :
             <SignInForm
