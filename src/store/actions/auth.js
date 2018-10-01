@@ -28,6 +28,7 @@ export const authLogout = () => {
     }
 }
 
+//logout user when time expires
 const logoutTimeOut = expirationTime => {
     return dispatch => {
         setTimeout( () => {
