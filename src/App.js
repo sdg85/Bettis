@@ -7,8 +7,8 @@ import Betting from './containers/Betting/Betting';
 import Score from './containers/Score/Score';
 import Auth from './containers/Auth/Auth';
 
-import Toolbar from './components/Navigation/Toolbar/Toolbar';
-import SideNav from './components/UI/SideNav/SideNave';
+import Navbar from './components/Navbar/Navbar';
+import SideNav from './containers/SideNav/SideNav';
 
 class App extends Component {
   state = {
@@ -22,6 +22,7 @@ class App extends Component {
   }
   closeSideNavHandler = () => {
     this.setState({
+      ...this.state,
       open: false
     })
   }
@@ -34,11 +35,10 @@ class App extends Component {
   render() {
     return (
       <Container>
-        <Toolbar openSideNav={this.sideNavToggleHandler} />
-        <SideNav isOpen={this.state.open} // maybe make the sidenav a stateful component
-          closeSideNav={this.closeSideNavHandler}
-          logout={this.logoutHandler}
-          authenticated={this.props.authenticated} />
+        <Navbar openSideNav={this.sideNavToggleHandler} />
+        <SideNav
+          isOpen={this.state.open}
+          close={this.closeSideNavHandler} />
         <Switch>
           <Route path="/table" component={Score} />
           <Route path="/auth" component={Auth} />
@@ -54,19 +54,5 @@ class App extends Component {
 export default App;
 
 const Container = styled.div`
-  /* width:100%;
-  height:100%;
-  background-image:url("./assets/background.jpg");
-  background-size: cover;
-  background-attachment:fixed; */
-  /* -webkit-background-size: 100%; 
-  -moz-background-size: 100%; 
-  -o-background-size: 100%; 
-  background-size: 100%;  */
-  /* -webkit-background-size: cover; 
-  -moz-background-size: cover; 
-  -o-background-size: cover;  */
-  /* background-size:cover; */
-    
   margin-top: 150px;
 `;
