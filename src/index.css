@@ -1,8 +1,17 @@
+html{
+  background: url("./assets/background.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  height: 100%;
+  overflow: hidden;
+}
+
 body {
-  background-image: url("./assets/background.jpg");
-  background-position: center;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
+  height:100%;
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
   margin: 0;
   padding: 0;
   font-family: 'Oxygen', sans-serif;
