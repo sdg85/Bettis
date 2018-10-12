@@ -5,11 +5,11 @@ import { withRouter } from 'react-router-dom';
 import AuthButton from '../UI/Buttons/AuthButton';
 import AuthLink from '../UI/Links/AuthLink';
 import AuthHeaderText from '../UI/HeaderTexts/AuthHeaderText';
+import Spinner from '../UI/Spinners/Spinner/Spinner';
 
 
 const signUpForm = props => {
     const fields = props.fields;
-
     return (
         <Form onSubmit={props.submit} name="signup">
             <div>
@@ -23,7 +23,7 @@ const signUpForm = props => {
                 touched={fields.firstName.touched}
                 onChange={props.onChanged}
                 placeholder="first name" />
-            
+
             <Input
                 type="text"
                 id="lastName"
@@ -32,7 +32,7 @@ const signUpForm = props => {
                 placeholder="last name"
                 valid={fields.lastName.valid}
                 touched={fields.lastName.touched} />
-            
+
             <Input
                 value={fields.email.value}
                 id="email"
@@ -41,7 +41,7 @@ const signUpForm = props => {
                 valid={fields.email.valid}
                 touched={fields.email.touched}
                 onChange={props.onChanged} />
-            
+
             <Input
                 value={fields.password.value}
                 id="password"
@@ -61,11 +61,11 @@ const signUpForm = props => {
                     placeholder="profile image"
                     onChange={props.onChanged} />
             </UploadContainer>
-            
-            {fields.imgUrl.value ? <img src={fields.imgUrl.value} width="100" height="100" alt="Profile" /> : null}
-            
+            <div style={{textAlign: "center", padding:10}}>
+                {fields.imgUrl.value && !props.loading ? <img src={fields.imgUrl.value} width="100" height="100" alt="Profile" /> : props.loading ? <Spinner /> : null}
+            </div>
             <AuthButton type="submit" disabled={props.disabled}>Sign Up</AuthButton>
-            <div style={{ textAlign:"center" }}>
+            <div style={{ textAlign: "center" }}>
                 <p>or</p>
                 <AuthLink navTo="/signin" >Sign in</AuthLink>
             </div>

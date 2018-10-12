@@ -67,10 +67,12 @@ const calculatePlayersResult = (fixtures, bets, users) => {
             won: 0
         };
 
+        //Get only fixtures that is finished
+        const finishedFixtures = fixtures.filter(fixture => fixture.status === "FINISHED");
         const userBets = bets ? bets.filter(bet => bet.userId === user.userId) : [];
 
         for (let bet of userBets) {
-            for (let fixture of fixtures) {
+            for (let fixture of finishedFixtures) {
                 if (bet.fixtureId === fixture.id) {
                     if (bet.bet === fixture.winner) {
                         player.points += 3; //3p for betting right

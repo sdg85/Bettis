@@ -40,33 +40,40 @@ class Auth extends Component {
                 valid: false,
                 placeholder: "image"
             },
-            valid: false,
+            formValid: false
+        },
+        loading: false,
+    }
+
+
+    onChangedHandler = (e) => {
+        //if it is a file input then upload selected file
+        if (e.target.id === "file")
+            this.uploadFile(e.target.files[0]);
+        else {
+            this.setState({
+                ...this.state,
+                form: {
+                    ...this.state.form,
+                    [e.target.id]: { ...this.state.form[e.target.id], value: e.target.value, touched: true, valid: e.target.value !== "" }
+                }
+            }, () => this.validate());
         }
     }
 
-    onChangedHandler = (e) => {
-        if (e.target.id === "file")
-            this.uploadFile(e.target.files[0]);
-        let valid = false;
-        //loop through form elements and check if validation status
+    //validate form
+    validate = () => {
+        let valid = true;
         for (let key in this.state.form) {
-            if (key === "valid")
+            if (key === "formValid")
                 continue;
 
-            if (!this.state.form[key].valid) {
-                valid = false;
-                break;
-            }
-        }
+            let element = this.state.form[key];
 
-        this.setState({
-            ...this.state,
-            form: {
-                ...this.state.form,
-                valid: valid,
-                [e.target.id]: { ...this.state.form[e.target.id], value: e.target.value, touched: true, valid: e.target.value }
-            }
-        });
+            if (!element.valid)
+                valid = false;
+        }
+        this.setState({ ...this.state, form: { ...this.state.form, formValid: valid } }, () => console.log(this.state.form.formValid));
     }
 
     //Submit the form
@@ -78,6 +85,9 @@ class Auth extends Component {
         if (signUp) {
 
             for (let key in this.state.form) {
+                if(key === "formValid")
+                    continue;
+
                 const element = this.state.form[key];
 
                 if (!element.valid) {
@@ -86,7 +96,7 @@ class Auth extends Component {
                 }
             }
         }
-        //if signin validate only email & password
+        //if signin, validate only email & password
         else {
             const email = this.state.form["email"];
             const password = this.state.form["password"];
@@ -108,32 +118,36 @@ class Auth extends Component {
             this.state.form.imgUrl.value, signUp);
     }
 
-    //Store characters from email input to the state
+    // Upload file to firebase storage and download the url to the file and save it to the ImgUrl in the state
     uploadFile = file => {
-        if (file) {
-            //create storage ref
-            var storageRef = firebase.storage().ref(`/images/${this.state.form.firstName.value}.${this.state.form.lastName.value}`);
+        if (!file)
+            return;
 
-            //upload file
-            var task = storageRef.put(file);
+        this.setState({ loading: true });
 
-            //task progress
-            task.on('state_changed',
-                //upload progress    
-                snapshot => console.log((Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(0) + " %")),
-                //upload error
-                error => console.log(error),
-                //upload complete. Set the url of the uploaded image to the state.
-                () => {
-                    storageRef.getDownloadURL().then(url => this.setState({
-                        ...this.state,
-                        form: {
-                            ...this.state.form,
-                            imgUrl: { ...this.state.form.imgUrl, value: url, touched: true, valid: true }
-                        }
-                    }));
-                });
-        }
+        //create storage ref
+        var storageRef = firebase.storage().ref(`/images/${this.state.form.firstName.value}.${this.state.form.lastName.value}`);
+
+        //upload file
+        var task = storageRef.put(file);
+
+        //task progress
+        task.on('state_changed',
+            //upload progress    
+            snapshot => console.log(this.state.loading, (Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(0) + " %")),
+            //upload error
+            error => console.log(error),
+            //upload complete. Set the url of the uploaded image to the state.
+            () => {
+                storageRef.getDownloadURL().then(url => this.setState({
+                    ...this.state,
+                    loading: false,
+                    form: {
+                        ...this.state.form,
+                        imgUrl: { ...this.state.form.imgUrl, value: url, touched: true, valid: true }
+                    }
+                }, () => this.validate()));
+            });
     }
 
     render() {
@@ -141,7 +155,8 @@ class Auth extends Component {
         let authView = this.props.match.url === "/signup" ?
             <SignUpForm
                 fields={this.state.form}
-                formValid={this.state.form.valid}
+                loading={this.state.loading}
+                formValid={this.state.form.formValid}
                 onChanged={this.onChangedHandler}
                 submit={this.onSubmitHandler} /> :
             <SignInForm
@@ -150,7 +165,7 @@ class Auth extends Component {
                 password={this.state.form.password}
                 onChanged={this.onChangedHandler} />
 
-        let view = this.props.loading ? <h4>loading...</h4> : this.props.tokenId ? <Redirect to={{
+        let view = this.props.loading ? <Spinner /> : this.props.tokenId ? <Redirect to={{
             pathname: this.props.location.state ? this.props.location.state.from : "/table"
         }} /> : authView;
 
