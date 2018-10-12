@@ -45,7 +45,6 @@ class Auth extends Component {
         loading: false,
     }
 
-
     onChangedHandler = (e) => {
         //if it is a file input then upload selected file
         if (e.target.id === "file")
@@ -85,7 +84,7 @@ class Auth extends Component {
         if (signUp) {
 
             for (let key in this.state.form) {
-                if(key === "formValid")
+                if (key === "formValid")
                     continue;
 
                 const element = this.state.form[key];
@@ -125,29 +124,36 @@ class Auth extends Component {
 
         this.setState({ loading: true });
 
-        //create storage ref
-        var storageRef = firebase.storage().ref(`/images/${this.state.form.firstName.value}.${this.state.form.lastName.value}`);
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
 
-        //upload file
-        var task = storageRef.put(file);
+            getOrientation(file, orientation => resetOrientation(reader.result, orientation, (resetBase64Image) => {
+                // //create storage ref
+                var storageRef = firebase.storage().ref(`/images/${this.state.form.firstName.value}.${this.state.form.lastName.value}`);
 
-        //task progress
-        task.on('state_changed',
-            //upload progress    
-            snapshot => console.log(this.state.loading, (Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(0) + " %")),
-            //upload error
-            error => console.log(error),
-            //upload complete. Set the url of the uploaded image to the state.
-            () => {
-                storageRef.getDownloadURL().then(url => this.setState({
-                    ...this.state,
-                    loading: false,
-                    form: {
-                        ...this.state.form,
-                        imgUrl: { ...this.state.form.imgUrl, value: url, touched: true, valid: true }
-                    }
-                }, () => this.validate()));
-            });
+                //upload file
+                var task = storageRef.putString(resetBase64Image, "data_url", { contentType: "image/jpg" });
+
+                //task progress
+                task.on('state_changed',
+                    //upload progress    
+                    snapshot => console.log(this.state.loading, (Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(0) + " %")),
+                    //upload error
+                    error => console.log(error),
+                    //upload complete. Set the url of the uploaded image to the state.
+                    () => {
+                        storageRef.getDownloadURL().then(url => this.setState({
+                            ...this.state,
+                            loading: false,
+                            form: {
+                                ...this.state.form,
+                                imgUrl: { ...this.state.form.imgUrl, value: url, touched: true, valid: true }
+                            }
+                        }, () => this.validate()));
+                    });
+            }));
+        }
     }
 
     render() {
@@ -206,28 +212,24 @@ const Error = styled.h4`
     padding: 10px
 `;
 
-//helpers
 
+//helpers
 //get orientation
-function getOrientation(file, callback) {
+const getOrientation = (file, callback) => {
     var reader = new FileReader();
-    reader.onload = function(e) {
+    reader.onload = function (e) {
 
         var view = new DataView(e.target.result);
-        if (view.getUint16(0, false) != 0xFFD8)
-        {
+        if (view.getUint16(0, false) != 0xFFD8) {
             return callback(-2);
         }
         var length = view.byteLength, offset = 2;
-        while (offset < length) 
-        {
-            if (view.getUint16(offset+2, false) <= 8) return callback(-1);
+        while (offset < length) {
+            if (view.getUint16(offset + 2, false) <= 8) return callback(-1);
             var marker = view.getUint16(offset, false);
             offset += 2;
-            if (marker == 0xFFE1) 
-            {
-                if (view.getUint32(offset += 2, false) != 0x45786966) 
-                {
+            if (marker == 0xFFE1) {
+                if (view.getUint32(offset += 2, false) != 0x45786966) {
                     return callback(-1);
                 }
 
@@ -235,20 +237,16 @@ function getOrientation(file, callback) {
                 offset += view.getUint32(offset + 4, little);
                 var tags = view.getUint16(offset, little);
                 offset += 2;
-                for (var i = 0; i < tags; i++)
-                {
-                    if (view.getUint16(offset + (i * 12), little) == 0x0112)
-                    {
+                for (var i = 0; i < tags; i++) {
+                    if (view.getUint16(offset + (i * 12), little) == 0x0112) {
                         return callback(view.getUint16(offset + (i * 12) + 8, little));
                     }
                 }
             }
-            else if ((marker & 0xFF00) != 0xFF00)
-            {
+            else if ((marker & 0xFF00) != 0xFF00) {
                 break;
             }
-            else
-            { 
+            else {
                 offset += view.getUint16(offset, false);
             }
         }
@@ -257,42 +255,42 @@ function getOrientation(file, callback) {
     reader.readAsArrayBuffer(file);
 }
 
-function resetOrientation(srcBase64, srcOrientation, callback) {
-	var img = new Image();	
+const resetOrientation = (srcBase64, srcOrientation, callback) => {
+    var img = new Image();
 
-	img.onload = function() {
-  	var width = img.width,
-    		height = img.height,
-        canvas = document.createElement('canvas'),
-	  		ctx = canvas.getContext("2d");
-		
-    // set proper canvas dimensions before transform & export
-		if (4 < srcOrientation && srcOrientation < 9) {
-    	canvas.width = height;
-      canvas.height = width;
-    } else {
-    	canvas.width = width;
-      canvas.height = height;
-    }
-	
-  	// transform context before drawing image
-		switch (srcOrientation) {
-      case 2: ctx.transform(-1, 0, 0, 1, width, 0); break;
-      case 3: ctx.transform(-1, 0, 0, -1, width, height ); break;
-      case 4: ctx.transform(1, 0, 0, -1, 0, height ); break;
-      case 5: ctx.transform(0, 1, 1, 0, 0, 0); break;
-      case 6: ctx.transform(0, 1, -1, 0, height , 0); break;
-      case 7: ctx.transform(0, -1, -1, 0, height , width); break;
-      case 8: ctx.transform(0, -1, 1, 0, 0, width); break;
-      default: break;
-    }
+    img.onload = function () {
+        var width = img.width,
+            height = img.height,
+            canvas = document.createElement('canvas'),
+            ctx = canvas.getContext("2d");
 
-		// draw image
-    ctx.drawImage(img, 0, 0);
+        // set proper canvas dimensions before transform & export
+        if (4 < srcOrientation && srcOrientation < 9) {
+            canvas.width = height;
+            canvas.height = width;
+        } else {
+            canvas.width = width;
+            canvas.height = height;
+        }
 
-		// export base64
-		callback(canvas.toDataURL());
-  };
+        // transform context before drawing image
+        switch (srcOrientation) {
+            case 2: ctx.transform(-1, 0, 0, 1, width, 0); break;
+            case 3: ctx.transform(-1, 0, 0, -1, width, height); break;
+            case 4: ctx.transform(1, 0, 0, -1, 0, height); break;
+            case 5: ctx.transform(0, 1, 1, 0, 0, 0); break;
+            case 6: ctx.transform(0, 1, -1, 0, height, 0); break;
+            case 7: ctx.transform(0, -1, -1, 0, height, width); break;
+            case 8: ctx.transform(0, -1, 1, 0, 0, width); break;
+            default: break;
+        }
 
-	img.src = srcBase64;
+        // draw image
+        ctx.drawImage(img, 0, 0);
+
+        // export base64
+        callback(canvas.toDataURL());
+    };
+
+    img.src = srcBase64;
 }
