@@ -89,6 +89,53 @@ const calculatePlayersResult = (fixtures, bets, users) => {
         player.betted = userBets.length; //how many times player betted
         player.points += userBets.length //1 point for each bet
 
+        //calculate players earlier bets, from excel
+        // name     B	R	PpB
+        // Ashour	16	8	0,5
+        // Chia    16	12	0,75
+        // Mikael	16	12	0,75
+        // Rebwar	16	10	0,62
+        // Simkha	16	11	0,68
+        // Alex    16	9	0,56
+
+        switch(player.name)
+        {
+            case "Ashour Shamoun":
+            player.betted += 16;
+            player.won += 8;
+            player.points += 8 * 3 + 16;
+            player.lost += 8;
+            break;
+            
+            case "Michael Narse":
+            player.betted += 16;
+            player.won += 12;
+            player.points += 12 * 3 + 16;
+            player.lost += 4;
+            break;
+
+            case "Rebwar Shakir":
+            player.betted += 16;
+            player.won += 10;
+            player.points += 10 * 3 + 16;
+            player.lost += 6;
+            break;
+
+            case "Alexander Barimo":
+            player.betted += 16;
+            player.won += 9;
+            player.points += 9 * 3 + 16;
+            player.lost += 7;
+            break;
+
+            case "simkha gorgis":
+            player.betted += 16;
+            player.won += 11;
+            player.points += 11 * 3 + 16;
+            player.lost += 5;
+            break;
+        }
+
         return player;
 
     }) : "There's no scores to show rigth now!";
